@@ -3,8 +3,8 @@ import SysAdminHomeView from '../views/SysAdminHomeView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    name: 'home',
+    path: '/syshome',
+    name: 'syshome',
     component: SysAdminHomeView
   },
   {
