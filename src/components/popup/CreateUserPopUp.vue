@@ -60,7 +60,7 @@
         </div>
         <div
             class="flex flex-col items-stretch ml-5 w-[50%] min-w-[450px] max-md:ml-0 max-md:w-full"
-            v-if="userType == 3"
+            v-if="userType === 3"
         >
           <div class="flex flex-col items-stretch max-md:mt-10">
             <div class="text-xl text-black">új jármű adatai</div>
@@ -142,11 +142,11 @@ export default defineComponent({
     async createUser(){
       let newUser = await UserService.createUser(this.email,this.passw,this.nameOfUser,this.userType);
       console.log(newUser)
-      if(this.userType == 3 && newUser != undefined){
+      if(this.userType === 3 && newUser !== undefined){
         let newVehicle = await VehicleService.createVehicle(this.seats,this.plateNum,this.carType,this.airCond);
-        if(newVehicle != undefined){
+        if(newVehicle !== undefined){
           let resp = await VehicleService.connectUserToVehicle(newUser.id,newVehicle.id)
-          if(resp == 200){
+          if(resp === 200){
             alert("Sikeres létrehozás")
           }
         }
@@ -167,7 +167,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style scoped>
-
-</style>

@@ -13,7 +13,7 @@ class UserService {
             })
             .then(response => {
                 if (response.data) {
-                    localStorage.setItem('user', JSON.stringify(response.data));
+                    localStorage.setItem('user', response.data);
                 }
                 return response.data;
             }).catch(err => console.log(err));
