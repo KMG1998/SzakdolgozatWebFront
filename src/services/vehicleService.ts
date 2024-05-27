@@ -1,5 +1,6 @@
 import axios from "axios";
 import Vehicle from "../types/Vehicle";
+import vehicle from "../types/Vehicle";
 const API_URL = 'http://localhost:8085/vehicle/';
 
 class VehicleService {
@@ -30,6 +31,21 @@ class VehicleService {
             .then(response => {
                 if (response.data) {
                     return response.status;
+                }
+            }).catch(err => console.log(err));
+    }
+
+    getAllVehicles(){
+        return axios
+            .get(API_URL + 'allVehicles',)
+            .then(response => {
+                if (response.data) {
+                    const vehicles = Array<vehicle>();
+                    console.log(response.data);
+                    response.data.map(function (value:vehicle,key:number){
+                        vehicles.push(value as vehicle)
+                    });
+                    return vehicles;
                 }
             }).catch(err => console.log(err));
     }

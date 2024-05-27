@@ -1,5 +1,6 @@
 import axios from "axios";
 import User from "../types/User";
+import user from "../types/User";
 const API_URL = 'http://localhost:8085/user/';
 
 
@@ -27,8 +28,23 @@ class UserService {
                 type:userType
             })
             .then(response => {
+                console.log(response);
                 if (response.data) {
                     return response.data as User;
+                }
+            }).catch(err => console.log(err));
+    }
+    getAllUsers(){
+        return axios
+            .get(API_URL + 'allUsers')
+            .then(response => {
+                console.log(response);
+                if (response.data) {
+                  const users = Array<user>();
+                  response.data.map(function (value:user,key:number){
+                      users.push(value as user)
+                  });
+                  return users;
                 }
             }).catch(err => console.log(err));
     }

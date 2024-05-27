@@ -1,6 +1,6 @@
 <template>
   <div class="fixed top-[15%] left-[25%] flex flex-col items-center py-4 bg-white rounded-3xl z-100">
-    <Form @submit="createUser">
+    <form @submit="createUser">
     <div class="w-full min-w-[500px] max-w-[1100px] max-md:max-w-full px-[10px]">
       <div class="flex gap-5 max-md:flex-col max-md:gap-0 max-md:items-stretch text-center">
         <div
@@ -60,7 +60,7 @@
         </div>
         <div
             class="flex flex-col items-stretch ml-5 w-[50%] min-w-[450px] max-md:ml-0 max-md:w-full"
-            v-if="userType === 3"
+            v-if="userType == 3"
         >
           <div class="flex flex-col items-stretch max-md:mt-10">
             <div class="text-xl text-black">új jármű adatai</div>
@@ -127,7 +127,7 @@
            name="Létrehozás"
         class="justify-center items-center px-16 py-2 mt-7 max-w-full text-xl text-black bg-white rounded-3xl border-2 border-black border-solid w-[403px] max-md:px-5"
     >
-    </Form>
+    </form>
   </div>
 </template>
 
@@ -141,7 +141,6 @@ export default defineComponent({
   methods:{
     async createUser(){
       let newUser = await UserService.createUser(this.email,this.passw,this.nameOfUser,this.userType);
-      console.log(newUser)
       if(this.userType === 3 && newUser !== undefined){
         let newVehicle = await VehicleService.createVehicle(this.seats,this.plateNum,this.carType,this.airCond);
         if(newVehicle !== undefined){
