@@ -5,6 +5,7 @@ import ReservesView from '@/views/ReservesView.vue'
 import UsersView from '@/views/UsersView.vue'
 import VehiclesView from '@/views/VehiclesView.vue'
 import CompaniesView from '@/views/CompaniesView.vue'
+import UserService from "../services/userService";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -16,41 +17,26 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/login',
         name: 'login',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: LoginView,
     },
     {
         path: '/reserves',
         name: 'reserves',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: ReservesView,
     },
     {
         path: '/users',
         name: 'users',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: UsersView,
     },
     {
         path: '/vehicles',
         name: 'vehicles',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: VehiclesView,
     },
     {
         path: '/companies',
         name: 'companies',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: CompaniesView,
     }
 ]
@@ -58,6 +44,11 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
     history: createWebHistory(),
     routes
+})
+
+router.beforeEach((to, from) => {
+    if(!UserService.isAuthenticated() && to.name != 'login')
+      return {name:'login'}
 })
 
 export default router

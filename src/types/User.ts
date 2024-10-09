@@ -6,7 +6,6 @@ interface User{
     typeId:number,
     email:string,
     password:string,
-    salt:string
 }
 
 export default User

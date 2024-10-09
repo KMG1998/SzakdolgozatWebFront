@@ -1,3 +1,9 @@
+
+<script setup>
+import { SemipolarSpinner  } from 'epic-spinners'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+</script>
 <template>
     <div
         class="flex flex-col justify-center items-center px-16 py-12 max-md:px-5 bg-gradient-to-b from-taxi-blue via-taxi-to-color via-75% to-white"
@@ -8,8 +14,8 @@
             src="../assets/images/magantaxi_logo.png"
             class="aspect-square object-contain object-center w-[319px] max-w-full"
         />
-        <Form @submit="auth">
-          <div>
+        <Form>
+          <div class="mt-2">
             <label for="email" class="text-black text-sm mt-14 max-md:mt-10">E-mail</label>
             <input id="email"
                    class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
@@ -18,7 +24,7 @@
                    aria-describedby="emailHelp"
                    v-model="email">
           </div>
-          <div>
+          <div class="mt-2">
             <label for="password" class="text-black text-sm mt-14 max-md:mt-10">Jelszó</label>
             <input id="password"
                    class="text-center shadow-sm bg-white self-stretch flex shrink-0 h-12 w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black"
@@ -26,7 +32,16 @@
                    aria-describedby="passwordHelp"
                    v-model="password">
           </div>
-          <input type="submit" value="Belépés" class="cursor-pointer text-black text-sm justify-center items-center bg-white w-[269px] max-w-full mt-8 px-16 py-1.5 rounded-3xl border-2 border-solid border-black max-md:px-5 hover:shadow-lg">
+          <input type="submit" value="Belépés" class="cursor-pointer text-black text-sm justify-center items-center bg-white w-[269px] max-w-full mt-8 px-16 py-1.5 rounded-3xl border-2 border-solid border-black max-md:px-5 hover:shadow-lg"
+                 v-if="!authInProgress"
+                 v-on:click="this.auth">
+          <div v-else class="flex items-center justify-center pt-2">
+            <semipolar-spinner
+                :animation-duration="2000"
+                :size="40"
+                color="#57A3EF"
+            />
+          </div>
         </Form>
         <div
             class="text-black text-sm underline whitespace-nowrap mt-14 max-md:mt-10"
@@ -45,15 +60,22 @@ import router from "@/router";
 export default defineComponent({
   name: "LoginView",
   methods:{
-    auth(){
-      if(UserService.login(this.email,this.password) != null){
-        router.push('syshome')
+    async auth(){
+      this.authInProgress = true
+      console.log(this.email+','+this.password)
+      const loginSuccess = await UserService.login(this.email,this.password)
+      if(loginSuccess === true){
+        this.authInProgress = false
+        await router.push('home')
+        return
       }
+      this.authInProgress = false
     }
   },data: function (){
     return {
       email:'',
-      password:''
+      password:'',
+      authInProgress: false,
     }
   }
 })
