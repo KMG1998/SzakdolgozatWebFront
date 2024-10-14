@@ -1,6 +1,6 @@
 import {UUID} from "vue-uuid";
 
-interface Vehicle {
+type Vehicle = {
     id: UUID,
     seats: number,
     description: string,

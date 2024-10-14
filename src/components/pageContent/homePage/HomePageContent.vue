@@ -1,12 +1,21 @@
 <script setup>
 import {useI18n} from 'vue-i18n'
+import CreateVehiclePopup from "@/components/popup/CreateVehiclePopup";
 
 const {t} = useI18n()
 </script>
 <template>
-  <div class="fixed z-10 w-full h-full" v-if="isPopupVisible">
-    <div class=" w-full h-full bg-gray-500 opacity-60" @click="toggle"/>
+  <div v-if="isUserPopupVisible" class="fixed z-10 w-full h-full flex items-center justify-center">
+    <div @click="toggleUserPopUp" class="bg-gray-500 opacity-60 w-full h-full"/>
     <CreateUserPopUp/>
+  </div>
+  <div v-if="isCompanyPopupVisible" class="fixed z-10 w-full h-full flex items-center justify-center">
+    <div @click="toggleCompanyPopUp" class="bg-gray-500 opacity-60 w-full h-full"/>
+    <CreateCompanyPopUp/>
+  </div>
+  <div v-if="isVehiclePopupVisible" class="fixed z-10 w-full h-full flex items-center justify-center">
+    <div @click="toggleVehiclePopUp" class="bg-gray-500 opacity-60 w-full h-full"/>
+    <CreateVehiclePopup/>
   </div>
   <div class="flex flex-row">
     <SysAdminMenu/>
@@ -35,6 +44,7 @@ const {t} = useI18n()
                       loading="lazy"
                       src="@/assets/images/new_comp_button.png"
                       class="object-contain object-center w-[100px] fill-white self-center max-w-full cursor-pointer"
+                      @click="toggleCompanyPopUp"
                   />
                   <div class="text-black text-xl whitespace-nowrap mt-6">
                     új cég
@@ -49,7 +59,7 @@ const {t} = useI18n()
                       loading="lazy"
                       src="@/assets/images/new_user_button.png"
                       class="object-contain object-center w-[100px] fill-white self-center max-w-full cursor-pointer"
-                      @click='toggle'
+                      @click='toggleUserPopUp'
                   />
                   <div class="text-black text-xl whitespace-nowrap mt-6">
                     <p>új felhasználó</p>
@@ -64,6 +74,7 @@ const {t} = useI18n()
                       loading="lazy"
                       src="@/assets/images/new_vehicle_button.png"
                       class="object-contain object-center w-[100px] fill-white self-center max-w-full cursor-pointer"
+                      @click='toggleVehiclePopUp'
                   />
                   <div class="text-black text-xl whitespace-nowrap mt-6">
                     <p>új jármű</p>
@@ -98,13 +109,13 @@ const {t} = useI18n()
           >
             <div class="flex items-stretch justify-between gap-5">
               <div class="">név:</div>
-              <div class="grow shrink basis-auto">{{userData['userName']}}</div>
+              <div class="grow shrink basis-auto">{{ userName }}</div>
             </div>
             <div
                 class="flex items-stretch justify-between gap-5 whitespace-nowrap mt-8"
             >
               <div class="">e-mail:</div>
-              <div class="grow">{{userData['userEmail']}}</div>
+              <div class="grow">{{ userEmail }}</div>
             </div>
           </div>
         </div>
@@ -116,23 +127,29 @@ const {t} = useI18n()
 <script>
 import SysAdminMenu from "@/components/commons/menu/SysAdminMenu";
 import CreateUserPopUp from "@/components/popup/CreateUserPopUp";
+import CreateCompanyPopUp from "@/components/popup/CreateCompanyPopUp";
 
 export default {
   name: "HomePageContent",
-  components: {SysAdminMenu, CreateUserPopUp},
+  components: {SysAdminMenu, CreateUserPopUp,CreateCompanyPopUp},
   methods: {
-    toggle() {
-      this.isPopupVisible = !this.isPopupVisible
+    toggleUserPopUp() {
+      this.isUserPopupVisible = !this.isUserPopupVisible
+    },
+    toggleCompanyPopUp() {
+      this.isCompanyPopupVisible = !this.isCompanyPopupVisible
+    },
+    toggleVehiclePopUp() {
+      this.isVehiclePopupVisible = !this.isVehiclePopupVisible
     },
   }, data: function () {
     return {
-      isPopupVisible: false,
-      userData:JSON.parse(window.localStorage.getItem('userData'))
+      isUserPopupVisible: false,
+      isCompanyPopupVisible: false,
+      isVehiclePopupVisible: false,
+      userName: JSON.parse(window.localStorage.getItem('userData')).name,
+      userEmail: JSON.parse(window.localStorage.getItem('userData')).email
     }
-  }
+  },
 }
 </script>
-
-<style scoped>
-
-</style>

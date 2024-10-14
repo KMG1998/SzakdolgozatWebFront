@@ -1,8 +1,8 @@
 import {UUID} from "vue-uuid";
 
-interface Company{
+type Company = {
     id: UUID,
-    name: string;
+    companyName: string;
     officeAddress: string;
     officeTel: string;
     officeEmail: string;

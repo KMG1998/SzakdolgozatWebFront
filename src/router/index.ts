@@ -5,7 +5,6 @@ import ReservesView from '@/views/ReservesView.vue'
 import UsersView from '@/views/UsersView.vue'
 import VehiclesView from '@/views/VehiclesView.vue'
 import CompaniesView from '@/views/CompaniesView.vue'
-import UserService from "../services/userService";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -46,8 +45,8 @@ const router = createRouter({
     routes
 })
 
-router.beforeEach((to, from) => {
-    if(!UserService.isAuthenticated() && to.name != 'login')
+router.beforeEach((to, _) => {
+    if(localStorage.getItem('authenticated')  != 'true' && to.name != 'login')
       return {name:'login'}
 })
 

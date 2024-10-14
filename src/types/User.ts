@@ -1,6 +1,6 @@
 import {UUID} from "vue-uuid";
 
-interface User{
+type User = {
     id: UUID,
     name:string,
     typeId:number,

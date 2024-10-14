@@ -1,4 +1,15 @@
+<script setup>
+import {useI18n} from 'vue-i18n'
+import { SemipolarSpinner  } from 'epic-spinners'
+import UserDetailsPopUp from "@/components/popup/UserDetailsPopUp";
+
+const {t} = useI18n()
+</script>
 <template>
+  <div v-if="isDetailsPopUpVisible" class="fixed z-10 w-full h-full flex items-center justify-center">
+    <div @click="toggleDetailsPopUp" class="bg-gray-500 opacity-60 w-full h-full"/>
+    <UserDetailsPopUp :userId="selectedUser"/>
+  </div>
   <div
       class="flex flex-col grow shrink-0 mt-6 whitespace-nowrap basis-0 w-fit max-md:max-w-full"
   >
@@ -8,36 +19,43 @@
           src="@/assets/images/search_button.png"
           class="self-center w-full aspect-square fill-white"
       />
-      <div class="mt-5">keresés</div>
     </div>
     <div
         class="flex flex-col px-6 pt-8 pb-20 mt-16 rounded-3xl bg-white bg-opacity-80 max-md:pl-5 max-md:mt-10 max-md:max-w-full"
     >
       <div class="max-md:max-w-full text-left">Felhasználók</div>
       <div>
-        <table>
+        <table v-if="userData !== undefined ">
+          <thead>
           <tr>
-            <th
-                v-for="(header, i) in headers.default()"
-                :key="`${header}${i}`"
-                class="header-item"
-            >
-              {{ header }}
+            <th v-for="(header, i) in headers" :key="`${header}${i}`" class="header-item">
+              {{ t('tableHeaders.userTable.' + header) }}
             </th>
           </tr>
-          <tr
-              v-for="entity in data"
-              :key="`entity-${entity.id}`"
-              class="table-rows"
-          >
-            <td
-                v-for="(userData, i) in [entity.id,entity.name,entity.type,entity.email]"
-                :key="`${userData}-${i}`"
-            >
+          </thead>
+          <tbody>
+          <tr v-for="entity in userData" :key="`entity-${entity.id}`" class="table-rows">
+            <td v-for="(userData, i) in [entity.id,entity.name,entity.typeId,entity.email]" :key="`${userData}-${i}`">
               {{ userData }}
             </td>
+            <td>
+              <img
+                  loading="lazy"
+                  src="@/assets/images/details_eye.png"
+                  class="object-contain object-center w-[30px] fill-white self-center max-w-full cursor-pointer"
+                  @click='toggleDetailsPopUp(entity.id)'
+              />
+            </td>
           </tr>
+          </tbody>
         </table>
+        <div v-else class="flex items-center justify-center pt-2">
+          <semipolar-spinner
+              :animation-duration="2000"
+              :size="80"
+              color="#57A3EF"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -51,16 +69,24 @@ export default defineComponent({
   name: "SysAdminUsersContent",
   data() {
     return {
-      headers: {type: Array, default: () => ['id', 'name', 'type', 'email']},
-      data: {type: Array, default: () => []}
+      headers: ['id', 'name', 'typeId', 'email'],
+      userData: undefined,
+      isDetailsPopUpVisible:false,
+      selectedUser:String
     }
   },
   methods: {
     getUsers: async function () {
-      this.data = await UserService.getAllUsers();
+      await new Promise(res => setTimeout(res, 3000))
+      this.userData = await UserService.getAllUsers();
     },
+    toggleDetailsPopUp(userId){
+      this.selectedUser = userId
+      this.isDetailsPopUpVisible = !this.isDetailsPopUpVisible
+    }
+
   },
-  beforeMount(){
+  beforeMount() {
     this.getUsers();
   },
 })

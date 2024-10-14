@@ -2,8 +2,9 @@ import axios, {AxiosError} from "axios";
 import User from "../types/User";
 import {toast} from 'vue3-toastify';
 
+
 const API_URL = 'http://localhost:8085/user/';
-const axiosClient = axios.create({withCredentials:true})
+const axiosClient = axios.create({withCredentials: true})
 
 class UserService {
     async login(email: string, password: string): Promise<boolean | null> {
@@ -12,11 +13,10 @@ class UserService {
             password: password
         }).then(response => {
             if (response.data) {
-                window.localStorage.setItem('authenticated','true')
-                window.localStorage.setItem('userData', JSON.stringify(response.data as User));
+                window.localStorage.setItem('authenticated', 'true')
+                window.localStorage.setItem('userData', JSON.stringify(response.data as User))
                 return true;
             }
-            console.log(response)
             return false;
         }).catch(err => {
                 if (err instanceof AxiosError && err.response) {
@@ -33,11 +33,11 @@ class UserService {
                     }
                 }
                 return null
-            },
+            }
         )
     }
 
-    createUser(email: string, password: string, name: string, userType: number) {
+    async createUser(email: string, password: string, name: string, userType: number): Promise<User | undefined> {
         return axiosClient
             .post(API_URL + 'create', {
                 email: email,
@@ -46,29 +46,68 @@ class UserService {
                 type: userType
             })
             .then(response => {
-                console.log(response);
                 if (response.data) {
                     return response.data as User;
                 }
-            }).catch(err => console.log(err));
-    }
-
-    getAllUsers() {
-        return axiosClient
-            .get(API_URL + 'allUsers')
-            .then(response => {
-                console.log(response);
-                if (response.data) {
-                    const users = Array<User>();
-                    response.data.map(function (value: User, key: number) {
-                        users.push(value as User)
-                    });
-                    return users;
+                return undefined;
+            }).catch(err => {
+                if (err instanceof AxiosError && err.response) {
+                    if (err.response.status === 400) {
+                        toast(err.response.statusText, {
+                            position: toast.POSITION.BOTTOM_LEFT,
+                            autoClose: 2000,
+                            type: "error",
+                            transition: "slide",
+                            hideProgressBar: true,
+                            icon: false,
+                            toastStyle: {"background-color": "#ed4e42", "color": "#ffffff"}
+                        });
+                    }
                 }
-            }).catch(err => console.log(err));
+                return undefined
+            });
     }
 
-    isAuthenticated(){ return window.localStorage.getItem('authenticated')}
+    async getAllUsers() {
+        try {
+            let response = await axiosClient
+                .get(API_URL + 'allUsers');
+            if (response.data) {
+                const users = Array<User>();
+                response.data.map(function (value: User) {
+                    users.push(value as User)
+                });
+                return users;
+            }
+        } catch (err) {
+            return console.log(err);
+        }
+    }
+
+    async getUser(userId:string): Promise<User | null> {
+        return axiosClient.post(API_URL + 'getUser',{userId:userId}).then(response => {
+                if (response.data) {
+                    return response.data as User
+                }
+                return null
+            }
+        ).catch(err => {
+            if (err instanceof AxiosError && err.response) {
+                if (err.response.status === 400) {
+                    toast(err.response.statusText, {
+                        position: toast.POSITION.BOTTOM_LEFT,
+                        autoClose: 2000,
+                        type: "error",
+                        transition: "slide",
+                        hideProgressBar: true,
+                        icon: false,
+                        toastStyle: {"background-color": "#ed4e42", "color": "#ffffff"}
+                    });
+                }
+            }
+            return null
+        })
+    }
 }
 
 export default new UserService()

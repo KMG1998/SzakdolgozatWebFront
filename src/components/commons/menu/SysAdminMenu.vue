@@ -9,23 +9,23 @@ const {t} = useI18n()
       <div
           class="bg-white bg-opacity-80 flex flex-col items-center text-xl text-black whitespace-nowrap w-full pt-6 pb-12 px-4 max-md:mt-6">
         <img
-            @click="this.$router.push('/home')"
+            @click="$router.push('/home')"
             loading="lazy"
             src="@/assets/images/magantaxi_logo.png"
             class="aspect-square object-contain object-center w-[200px] cursor-pointer"
         >
-        <div class="text-center mt-10">{{ userName }}</div>
-        <div class="mt-11 max-md:mt-10 cursor-pointer" @click="this.$router.push('/users')">{{
+        <div class="text-center mt-10">{{userName}}</div>
+        <div class="mt-11 max-md:mt-10 cursor-pointer" @click="$router.push('/users')">{{
             t("sideMenu.usersPage")
           }}
         </div>
-        <div class="mt-11 max-md:mt-10 cursor-pointer" @click="this.$router.push('/vehicles')">
+        <div class="mt-11 max-md:mt-10 cursor-pointer" @click="$router.push('/vehicles')">
           {{ t("sideMenu.vehiclesPage") }}
         </div>
-        <div class="mt-11 max-md:mt-10 cursor-pointer" @click="this.$router.push('/reserves')">
+        <div class="mt-11 max-md:mt-10 cursor-pointer" @click="$router.push('/reserves')">
           {{ t("sideMenu.reservationsPage") }}
         </div>
-        <div class="mt-10 max-md:mt-10 cursor-pointer" @click="this.$router.push('/companies')">
+        <div class="mt-10 max-md:mt-10 cursor-pointer" @click="$router.push('/companies')">
           {{ t("sideMenu.companiesPage") }}
         </div>
         <img
@@ -39,13 +39,13 @@ const {t} = useI18n()
 </template>
 
 <script>
-import {defineComponent} from 'vue';
+import {defineComponent} from 'vue'
 
 export default defineComponent({
   name: 'SysAdminMenu',
   data() {
     return {
-      userName: JSON.parse(window.localStorage.getItem('userData'))['userName']
+      userName: JSON.parse(window.localStorage.getItem('userData')).name
     }
   },
   methods: {
