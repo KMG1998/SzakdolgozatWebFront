@@ -1,7 +1,7 @@
 <script setup>
 import {useI18n} from 'vue-i18n'
 import { SemipolarSpinner  } from 'epic-spinners'
-import UserDetailsPopUp from "@/components/popup/UserDetailsPopUp";
+import UserDetailsPopUp from "@/components/popup/userDataPopUp/UserDetailsPopUp";
 
 const {t} = useI18n()
 </script>

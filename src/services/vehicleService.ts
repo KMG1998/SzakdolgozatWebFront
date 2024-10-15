@@ -1,9 +1,9 @@
-import axios,{AxiosError}  from "axios";
+import axios, {AxiosError} from "axios";
 import Vehicle from "../types/Vehicle";
 import {toast} from "vue3-toastify";
 
 const API_URL = 'http://localhost:8085/vehicle/';
-const axiosClient = axios.create({withCredentials:true})
+const axiosClient = axios.create({withCredentials: true})
 
 class VehicleService {
     createVehicle(seats: number,
@@ -15,7 +15,7 @@ class VehicleService {
                 seats: seats,
                 plateNumber: plateNum,
                 type: carType,
-                airCond: airCond == 0 ? false : true
+                airCond: airCond != 0
             })
             .then(response => {
                 if (response.data) {
@@ -60,7 +60,7 @@ class VehicleService {
                 if (response.data) {
                     const vehicles = Array<Vehicle>();
                     console.log(response.data);
-                    response.data.map(function (value: Vehicle, key: number) {
+                    response.data.map(function (value: Vehicle, _: number) {
                         vehicles.push(value as Vehicle)
                     });
                     return vehicles;
@@ -80,6 +80,21 @@ class VehicleService {
                         });
                     }
                 }
+                return undefined
+            })
+    }
+
+    async getVehicleByDriver(driverId:string): Promise<Vehicle | undefined> {
+        return axiosClient
+            .post(API_URL + 'findByDriver', {
+                driverId: driverId,
+            }).then(response => {
+                if (response.data) {
+                    return response.data as Vehicle
+                }
+                return undefined
+            }).catch(err =>{
+                console.log(err)
                 return undefined
             })
     }

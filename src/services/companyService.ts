@@ -5,7 +5,7 @@ const API_URL = 'http://localhost:8085/company/';
 const axiosClient = axios.create({withCredentials: true})
 
 class CompanyService {
-    createCompany(name: string,
+    async createCompany(name: string,
                   officeAddress: string,
                   officeTel: string,
                   officeEmail: string){
@@ -43,8 +43,8 @@ class CompanyService {
         return null
     }
 
-    getCompanyByWorker(){
-        return null
+    async getCompanyByWorker():Promise<Company|undefined>{
+        return undefined
     }
 
 }
