@@ -1,6 +1,6 @@
 import {UUID} from "vue-uuid";
 
-type Company = {
+type Company = undefined | {
     id: UUID,
     companyName: string;
     officeAddress: string;

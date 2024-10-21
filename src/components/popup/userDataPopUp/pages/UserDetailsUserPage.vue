@@ -1,3 +1,9 @@
+<script setup>
+import {useI18n} from 'vue-i18n'
+import {SemipolarSpinner} from 'epic-spinners'
+
+const {t} = useI18n()
+</script>
 <template>
   <form @submit.prevent>
     <div class="w-full min-w-[500px] max-w-[1100px] max-md:max-w-full px-[10px]">
@@ -6,7 +12,7 @@
             class="flex flex-col items-stretch w-[100%] min-w-[450px] max-md:ml-0 max-md:w-full"
         >
           <div class="flex flex-col grow items-stretch max-md:mt-10">
-            <p class="text-xl text-black">felhasználó adatai</p>
+            <p class="text-xl font-bold text-black">felhasználó adatai</p>
             <div class="flex flex-col items-stretch mt-9 max-md:pl-5">
               <label
                   for="email"
@@ -19,7 +25,8 @@
                      type="text"
                      placeholder="E-mail"
                      aria-describedby="emailHelp"
-                     v-model="email">
+                     :readonly="!this.editInProgress"
+                     v-model="this.userData.email">
               <label for="name" class="self-center mt-6 text-xl text-center text-black whitespace-nowrap">
                 felhasználó neve
               </label>
@@ -28,10 +35,15 @@
                      type="text"
                      placeholder="név"
                      aria-describedby="nameHelp"
-                     v-model="nameOfUser">
+                     :readonly="!this.editInProgress"
+                     v-model="this.userData.name">
+              <label for="userType" class="self-center mt-6 text-xl text-center text-black">
+                típus
+              </label>
               <select id="userType"
-                      class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full rounded-3xl border-2 border-solid border-black text-center"
-                      v-model="userType"
+                      class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full rounded-3xl border-2 border-solid border-black text-center disabled: text-black disabled:opacity-100 disabled:appearance-none"
+                      v-model="this.userData.typeId"
+                      :disabled="!this.editInProgress"
                       required>
                 <option value=1>Rendszer adminisztrátor</option>
                 <option value=2>Céges adminisztrátor</option>
@@ -46,14 +58,15 @@
     </div>
     <div
         class="self-stretch mt-9 w-full bg-black min-h-[2px] max-md:max-w-full"
+        v-if="saveInProgress || editInProgress"
     ></div>
     <button type="button"
-            @click="createUser"
-            v-if="!createInProgress"
+            @click="saveUserChanges"
+            v-if="editInProgress"
             class="justify-center items-center px-16 py-2 mt-7 max-w-full text-xl text-black bg-white rounded-3xl border-2 border-black border-solid w-[403px] max-md:px-5"
-    >Létrehozás
+    >Mentés
     </button>
-    <div v-else class="flex items-center justify-center pt-2">
+    <div v-if="saveInProgress" class="flex items-center justify-center pt-2">
       <semipolar-spinner
           :animation-duration="2000"
           :size="40"
@@ -64,11 +77,33 @@
 </template>
 
 <script>
+
+import * as User from "@/types/User";
+import UserService from "@/services/userService";
+
 export default {
-  name: "UserDetailsPage"
+  name: "UserDetailsUserPage",
+  props: {
+    user: User,
+  },
+  methods:{
+    async saveUserChanges(){
+      this.saveInProgress = true;
+      const success = await UserService.updateUser(this.userData)
+      this.saveInProgress = false;
+      if(success){
+        console.log('great success')
+        return
+      }
+      console.log('fuckup')
+    }
+  },
+  data: function () {
+    return {
+      userData: this.user,
+      editInProgress: true,
+      saveInProgress: false,
+    }
+  },
 }
 </script>
-
-<style scoped>
-
-</style>

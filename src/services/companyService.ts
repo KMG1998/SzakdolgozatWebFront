@@ -43,7 +43,7 @@ class CompanyService {
         return null
     }
 
-    async getCompanyByWorker():Promise<Company|undefined>{
+    async getCompanyByWorker(workerId:string):Promise<Company|undefined>{
         return undefined
     }
 

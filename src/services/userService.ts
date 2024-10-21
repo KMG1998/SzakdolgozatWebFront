@@ -8,7 +8,7 @@ const axiosClient = axios.create({withCredentials: true})
 
 class UserService {
     async login(email: string, password: string): Promise<boolean | null> {
-        return axiosClient.post(API_URL + 'signIn', {
+        return axiosClient.post(API_URL + 'signInAdmin', {
             email: email,
             password: password
         }).then(response => {
@@ -107,6 +107,15 @@ class UserService {
             }
             return null
         })
+    }
+
+    async updateUser(user:User): Promise<boolean>{
+        axiosClient.post(API_URL+'updateUser',{userData:JSON.stringify(user)}).then(
+            resp => {
+                return resp.data as boolean;
+            }
+        ).catch(err => console.log(err))
+        return false
     }
 }
 

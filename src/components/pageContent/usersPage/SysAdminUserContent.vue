@@ -8,7 +8,7 @@ const {t} = useI18n()
 <template>
   <div v-if="isDetailsPopUpVisible" class="fixed z-10 w-full h-full flex items-center justify-center">
     <div @click="toggleDetailsPopUp" class="bg-gray-500 opacity-60 w-full h-full"/>
-    <UserDetailsPopUp :userId="selectedUser"/>
+    <UserDetailsPopUp :userData="selectedUser"/>
   </div>
   <div
       class="flex flex-col grow shrink-0 mt-6 whitespace-nowrap basis-0 w-fit max-md:max-w-full"
@@ -43,7 +43,7 @@ const {t} = useI18n()
                   loading="lazy"
                   src="@/assets/images/details_eye.png"
                   class="object-contain object-center w-[30px] fill-white self-center max-w-full cursor-pointer"
-                  @click='toggleDetailsPopUp(entity.id)'
+                  @click='toggleDetailsPopUp(entity)'
               />
             </td>
           </tr>
@@ -77,11 +77,10 @@ export default defineComponent({
   },
   methods: {
     getUsers: async function () {
-      await new Promise(res => setTimeout(res, 3000))
       this.userData = await UserService.getAllUsers();
     },
-    toggleDetailsPopUp(userId){
-      this.selectedUser = userId
+    toggleDetailsPopUp(selectedUser){
+      this.selectedUser = selectedUser
       this.isDetailsPopUpVisible = !this.isDetailsPopUpVisible
     }
 
