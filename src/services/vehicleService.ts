@@ -9,13 +9,13 @@ class VehicleService {
     createVehicle(seats: number,
                   plateNum: string,
                   carType: string,
-                  airCond: number) {
+                  airCond: boolean) {
         return axiosClient
             .post(API_URL + 'create', {
                 seats: seats,
                 plateNumber: plateNum,
                 type: carType,
-                airCond: airCond != 0
+                airCond: airCond
             })
             .then(response => {
                 if (response.data) {

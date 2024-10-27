@@ -1,15 +1,13 @@
 <script setup>
 import {useI18n} from 'vue-i18n'
-import { SemipolarSpinner  } from 'epic-spinners'
-import UserDetailsPopUp from "@/components/popup/userDataPopUp/UserDetailsPopUp";
+import {SemipolarSpinner} from 'epic-spinners'
 
 const {t} = useI18n()
 </script>
 <template>
-  <div v-if="isDetailsPopUpVisible" class="fixed z-10 w-full h-full flex items-center justify-center">
-    <div @click="toggleDetailsPopUp" class="bg-gray-500 opacity-60 w-full h-full"/>
-    <UserDetailsPopUp :userData="selectedUser"/>
-  </div>
+    <PopUp :visiblity-variable="isDetailsPopUpVisible" @toggle="toggleDetailsPopUp">
+      <UserDetailsPopUp :userData="selectedUser"/>
+    </PopUp>
   <div
       class="flex flex-col grow shrink-0 mt-6 whitespace-nowrap basis-0 w-fit max-md:max-w-full"
   >
@@ -64,22 +62,27 @@ const {t} = useI18n()
 <script>
 import {defineComponent} from 'vue';
 import UserService from "@/services/userService";
+import PopUp from "@/components/popup/PopUp";
+import UserDetailsPopUp from "@/components/popup/userDataPopUp/UserDetailsPopUp";
 
 export default defineComponent({
   name: "SysAdminUsersContent",
+  components:{
+    PopUp,UserDetailsPopUp
+  },
   data() {
     return {
       headers: ['id', 'name', 'typeId', 'email'],
       userData: undefined,
-      isDetailsPopUpVisible:false,
-      selectedUser:String
+      isDetailsPopUpVisible: false,
+      selectedUser: String
     }
   },
   methods: {
     getUsers: async function () {
       this.userData = await UserService.getAllUsers();
     },
-    toggleDetailsPopUp(selectedUser){
+    toggleDetailsPopUp(selectedUser) {
       this.selectedUser = selectedUser
       this.isDetailsPopUpVisible = !this.isDetailsPopUpVisible
     }

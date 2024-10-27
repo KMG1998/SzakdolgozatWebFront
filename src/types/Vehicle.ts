@@ -3,7 +3,7 @@ import {UUID} from "vue-uuid";
 type Vehicle = undefined | {
     id: UUID,
     seats: number,
-    description: string,
+    color: string,
     type: string,
     airCond: boolean,
     available: boolean,

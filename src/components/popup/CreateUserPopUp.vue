@@ -112,14 +112,14 @@ const {t} = useI18n()
                     <label for="airCondYes" class="mt-6 text-xl text-center text-black">
                       Igen
                     </label>
-                    <input id="airCondYes" type="radio" :value=1 name="airCond" class="h-[15px] w-[15px]"
+                    <input id="airCondYes" type="radio" :value=true name="airCond" class="h-[15px] w-[15px]"
                            v-model="airCond">
                   </div>
                   <div>
                     <label for="airCondNo" class="mt-6 text-xl text-center text-black">
                       Nem
                     </label>
-                    <input id="airCondNo" type="radio" :value=0 name="airCond" class="h-[15px] w-[15px]"
+                    <input id="airCondNo" type="radio" :value=false name="airCond" class="h-[15px] w-[15px]"
                            v-model="airCond">
                   </div>
                 </div>

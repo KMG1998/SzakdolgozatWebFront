@@ -1,8 +1,5 @@
 <script setup>
-import {useI18n} from 'vue-i18n'
-import {SemipolarSpinner} from 'epic-spinners'
-
-const {t} = useI18n()
+import { SemipolarSpinner  } from 'epic-spinners'
 </script>
 <template>
   <form @submit.prevent>
@@ -25,8 +22,8 @@ const {t} = useI18n()
                      type="text"
                      placeholder="E-mail"
                      aria-describedby="emailHelp"
-                     :readonly="!this.editInProgress"
-                     v-model="this.userData.email">
+                     :readonly="!editInProgress"
+                     v-model="user.email">
               <label for="name" class="self-center mt-6 text-xl text-center text-black whitespace-nowrap">
                 felhasználó neve
               </label>
@@ -35,15 +32,15 @@ const {t} = useI18n()
                      type="text"
                      placeholder="név"
                      aria-describedby="nameHelp"
-                     :readonly="!this.editInProgress"
-                     v-model="this.userData.name">
+                     :readonly="!editInProgress"
+                     v-model="user.name">
               <label for="userType" class="self-center mt-6 text-xl text-center text-black">
                 típus
               </label>
               <select id="userType"
                       class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full rounded-3xl border-2 border-solid border-black text-center disabled: text-black disabled:opacity-100 disabled:appearance-none"
-                      v-model="this.userData.typeId"
-                      :disabled="!this.editInProgress"
+                      v-model="user.typeId"
+                      :disabled="!editInProgress"
                       required>
                 <option value=1>Rendszer adminisztrátor</option>
                 <option value=2>Céges adminisztrátor</option>
@@ -80,18 +77,20 @@ const {t} = useI18n()
 
 import * as User from "@/types/User";
 import UserService from "@/services/userService";
+import {defineComponent} from "vue";
+import {useI18n} from "vue-i18n";
 
-export default {
+export default defineComponent({
   name: "UserDetailsUserPage",
   props: {
     user: User,
   },
-  methods:{
-    async saveUserChanges(){
+  methods: {
+    async saveUserChanges() {
       this.saveInProgress = true;
       const success = await UserService.updateUser(this.userData)
       this.saveInProgress = false;
-      if(success){
+      if (success) {
         console.log('great success')
         return
       }
@@ -100,10 +99,10 @@ export default {
   },
   data: function () {
     return {
-      userData: this.user,
       editInProgress: true,
       saveInProgress: false,
+      translator: useI18n()
     }
   },
-}
+})
 </script>

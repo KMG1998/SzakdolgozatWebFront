@@ -3,11 +3,12 @@
 </template>
 
 <script>
+import * as Company from "@/types/Company";
+
 export default {
-  name: "UserDetailsCompanyPage"
+  name: "UserDetailsCompanyPage",
+  props:{
+    company: Company
+  }
 }
 </script>
-
-<style scoped>
-
-</style>
