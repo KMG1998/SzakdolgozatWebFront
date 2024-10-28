@@ -4,23 +4,23 @@ import {useI18n} from 'vue-i18n'
 const {t} = useI18n()
 </script>
 <template>
-  <table>
+  <table v-if="tableData != undefined">
     <tr>
       <th
-          v-for="(header, i) in headers"
+          v-for="(header, i) in Object.keys(tableData)"
           :key="`${header}${i}`"
           class="header-item"
       >
-        {{ t('tableHeaders.userTable.' + header) }}
+        {{ t("`tableHeaders.${headerClass}.${header}`") }}
       </th>
     </tr>
     <tr
-        v-for="entity in data"
+        v-for="entity in tableData"
         :key="`entity-${entity.id}`"
         class="table-rows"
     >
       <td
-          v-for="(userData, i) in [entity.id,entity.name,entity.typeId,entity.email]"
+          v-for="(userData, i) in Object.keys(entity)"
           :key="`${userData}-${i}`"
       >
         {{ userData }}
@@ -35,9 +35,11 @@ import {defineComponent} from "vue";
 export default defineComponent({
   name: "dataTable",
   props: {
+    tableData: Object,
+    headerClass: String
   },
   beforeMount() {
-    console.log(this.tableProps)
+    console.log(this.tableData)
   }
 })
 </script>

@@ -7,7 +7,7 @@ const {t} = useI18n()
 <template>
   <div class="fixed top-[15%] left-[25%] flex flex-col items-center py-4 bg-white rounded-3xl z-100">
     <form @submit.prevent>
-      <div class="w-full min-w-[500px] max-w-[1100px] max-md:max-w-full px-[10px]">
+      <div class="w-full min-w-[500px] max-md:max-w-full px-[10px]">
         <div class="flex gap-5 max-md:flex-col max-md:gap-0 max-md:items-stretch text-center">
           <div
               class="flex flex-col items-stretch w-[100%] min-w-[450px] max-md:ml-0 max-md:w-full"

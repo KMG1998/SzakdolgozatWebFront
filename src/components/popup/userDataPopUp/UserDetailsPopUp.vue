@@ -1,8 +1,3 @@
-<script setup>
-import {useI18n} from 'vue-i18n'
-
-const {t} = useI18n()
-</script>
 <template>
   <div class="fixed flex flex-col items-center py-4 bg-white rounded-3xl opacity-100 z-50">
     <div
@@ -57,6 +52,7 @@ import UserDetailsVehiclePage from "@/components/popup/userDataPopUp/pages/UserD
 import UserDetailsCompanyPage from "@/components/popup/userDataPopUp/pages/UserDetailsCompanyPage";
 import CompanyService from "@/services/companyService";
 import VehicleService from "@/services/vehicleService";
+import {useI18n} from 'vue-i18n'
 import UserDetailsUserPage from "@/components/popup/userDataPopUp/pages/UserDetailsUserPage";
 
 let pages = {
@@ -76,7 +72,8 @@ export default defineComponent({
       vehicleData: undefined,
       companyData: undefined,
       modalPages: pages,
-      selectedPage: undefined
+      selectedPage: undefined,
+      translate: useI18n()
     }
   },
   methods: {

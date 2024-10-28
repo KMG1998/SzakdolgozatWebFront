@@ -5,6 +5,8 @@ import ReservesView from '@/views/ReservesView.vue'
 import UsersView from '@/views/UsersView.vue'
 import VehiclesView from '@/views/VehiclesView.vue'
 import CompaniesView from '@/views/CompaniesView.vue'
+import { useCookies } from "vue3-cookies";
+const { cookies } = useCookies();
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -46,7 +48,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, _) => {
-    if(localStorage.getItem('authenticated')  != 'true' && to.name != 'login')
+    if(cookies.get('authenticated')  != 'true' && to.name != 'login')
       return {name:'login'}
 })
 

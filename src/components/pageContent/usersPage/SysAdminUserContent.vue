@@ -1,6 +1,7 @@
 <script setup>
 import {useI18n} from 'vue-i18n'
 import {SemipolarSpinner} from 'epic-spinners'
+import DataTable from "@/components/commons/dataTable";
 
 const {t} = useI18n()
 </script>
@@ -23,31 +24,8 @@ const {t} = useI18n()
     >
       <div class="max-md:max-w-full text-left">Felhasználók</div>
       <div>
-        <table v-if="userData !== undefined ">
-          <thead>
-          <tr>
-            <th v-for="(header, i) in headers" :key="`${header}${i}`" class="header-item">
-              {{ t('tableHeaders.userTable.' + header) }}
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="entity in userData" :key="`entity-${entity.id}`" class="table-rows">
-            <td v-for="(userData, i) in [entity.id,entity.name,entity.typeId,entity.email]" :key="`${userData}-${i}`">
-              {{ userData }}
-            </td>
-            <td>
-              <img
-                  loading="lazy"
-                  src="@/assets/images/details_eye.png"
-                  class="object-contain object-center w-[30px] fill-white self-center max-w-full cursor-pointer"
-                  @click='toggleDetailsPopUp(entity)'
-              />
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        <div v-else class="flex items-center justify-center pt-2">
+        <DataTable :table-data="userData" header-class="userTable" />
+        <div v-if="loading" class="flex items-center justify-center pt-2">
           <semipolar-spinner
               :animation-duration="2000"
               :size="80"
@@ -75,12 +53,14 @@ export default defineComponent({
       headers: ['id', 'name', 'typeId', 'email'],
       userData: undefined,
       isDetailsPopUpVisible: false,
-      selectedUser: String
+      selectedUser: String,
+      loading: true
     }
   },
   methods: {
     getUsers: async function () {
       this.userData = await UserService.getAllUsers();
+      this.loading = false
     },
     toggleDetailsPopUp(selectedUser) {
       this.selectedUser = selectedUser

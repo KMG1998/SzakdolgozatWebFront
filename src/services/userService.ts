@@ -13,7 +13,6 @@ class UserService {
             password: password
         }).then(response => {
             if (response.data) {
-                window.localStorage.setItem('authenticated', 'true')
                 window.localStorage.setItem('userData', JSON.stringify(response.data as User))
                 return true;
             }

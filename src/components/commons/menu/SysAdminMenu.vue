@@ -5,10 +5,9 @@ import router from "@/router";
 const {t} = useI18n()
 </script>
 <template>
-  <div class="relative z-0 gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0 mr-7">
-    <div class="flex flex-col items-stretch w-full max-md:w-full max-md:ml-0">
+  <div class="relative z-0 h-[100vh] gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0 mr-7">
       <div
-          class="bg-white bg-opacity-80 flex flex-col items-center text-xl text-black whitespace-nowrap w-full pt-6 pb-12 px-4 max-md:mt-6">
+          class="bg-white h-full bg-opacity-80 flex flex-col items-center text-xl text-black whitespace-nowrap w-full pt-6 pb-12 px-4 max-md:mt-6">
         <img
             @click="router.push('/home')"
             loading="lazy"
@@ -29,14 +28,14 @@ const {t} = useI18n()
         <div class="mt-10 max-md:mt-10 cursor-pointer" @click="router.push('/companies')">
           {{ t("sideMenu.companiesPage") }}
         </div>
+        <div class="h-full"/>
         <img
-            class="object-contain object-center w-[92px] 2xl:mt-76 xl:mt-70 lg:mt-40 md:mt-32 mt-52 fill-black"
+            class="object-contain object-center w-[92px] fill-black"
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/2142fb626b47add1e5b64bf99c1521943cae418263d6643a2f61a94bcf9ade63?apiKey=e5f87d76f51449099bc2390e0669341c&"
         >
       </div>
     </div>
-  </div>
 </template>
 
 <script>
