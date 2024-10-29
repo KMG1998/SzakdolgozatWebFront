@@ -8,8 +8,8 @@
 
 <script>
 import {defineComponent} from 'vue';
-import SysAdminMenu from "@/components/commons/menu/SysAdminMenu";
-import SysAdminVehiclesContent from "@/components/pageContent/vehiclesPage/SysAdminVehiclesContent";
+import SysAdminMenu from "@/components/commons/menu/SysAdminMenu.vue";
+import SysAdminVehiclesContent from "@/components/pageContent/vehiclesPage/SysAdminVehiclesContent.vue";
 export default defineComponent({
   name: "VehiclesView",
   components:{SysAdminVehiclesContent, SysAdminMenu}

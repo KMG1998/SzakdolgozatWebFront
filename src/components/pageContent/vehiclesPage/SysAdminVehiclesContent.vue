@@ -1,8 +1,5 @@
 <script setup>
-import {useI18n} from 'vue-i18n'
 import { SemipolarSpinner  } from 'epic-spinners'
-
-const {t} = useI18n()
 </script>
 <template>
   <div

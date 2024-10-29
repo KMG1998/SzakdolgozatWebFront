@@ -1,5 +1,5 @@
 import axios, {AxiosError} from "axios";
-import User from "../types/User";
+import * as User from "../types/User";
 import {toast} from 'vue3-toastify';
 
 
@@ -17,7 +17,7 @@ class UserService {
                 return true;
             }
             return false;
-        }).catch(err => {
+        }).catch((err) => {
                 if (err instanceof AxiosError && err.response) {
                     if (err.response.status === 400) {
                         toast('YA FUCKED UP', {

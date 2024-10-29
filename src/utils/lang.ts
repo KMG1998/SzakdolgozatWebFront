@@ -2,7 +2,8 @@ import {createI18n} from "vue-i18n";
 
 const i18n = createI18n({
     locale: 'hu',
-    legacy: false,
+    legacy: true,
+    globalInjection: true,
     messages: {
         hu: {
             mainPage: {

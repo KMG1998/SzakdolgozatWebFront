@@ -1,5 +1,5 @@
 import axios, {AxiosError} from "axios";
-import Vehicle from "../types/Vehicle";
+import * as Vehicle from "../types/Vehicle";
 import {toast} from "vue3-toastify";
 
 const API_URL = 'http://localhost:8085/vehicle/';
@@ -9,7 +9,7 @@ class VehicleService {
     createVehicle(seats: number,
                   plateNum: string,
                   carType: string,
-                  airCond: boolean) {
+                  airCond: boolean) : Promise<Vehicle | void> {
         return axiosClient
             .post(API_URL + 'create', {
                 seats: seats,

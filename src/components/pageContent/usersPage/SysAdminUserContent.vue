@@ -1,9 +1,7 @@
 <script setup>
-import {useI18n} from 'vue-i18n'
 import {SemipolarSpinner} from 'epic-spinners'
-import DataTable from "@/components/commons/dataTable";
+import DataTable from "@/components/commons/dataTable.vue";
 
-const {t} = useI18n()
 </script>
 <template>
     <PopUp :visiblity-variable="isDetailsPopUpVisible" @toggle="toggleDetailsPopUp">
@@ -40,8 +38,8 @@ const {t} = useI18n()
 <script>
 import {defineComponent} from 'vue';
 import UserService from "@/services/userService";
-import PopUp from "@/components/popup/PopUp";
-import UserDetailsPopUp from "@/components/popup/userDataPopUp/UserDetailsPopUp";
+import PopUp from "@/components/popup/PopUp.vue";
+import UserDetailsPopUp from "@/components/popup/userDataPopUp/UserDetailsPopUp.vue";
 
 export default defineComponent({
   name: "SysAdminUsersContent",

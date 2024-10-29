@@ -1,12 +1,9 @@
 <script setup>
-import {useI18n} from 'vue-i18n'
 import { SemipolarSpinner  } from 'epic-spinners'
-
-const {t} = useI18n()
 </script>
 <template>
   <div class="fixed top-[15%] left-[25%] flex flex-col items-center py-4 bg-white rounded-3xl z-100">
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent>
       <div class="w-full min-w-[500px] max-w-[1100px] max-md:max-w-full px-[10px]">
         <div class="flex gap-5 max-md:flex-col max-md:gap-0 max-md:items-stretch text-center">
           <div

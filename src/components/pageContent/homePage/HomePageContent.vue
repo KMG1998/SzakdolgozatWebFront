@@ -1,8 +1,5 @@
 <script setup>
-import {useI18n} from 'vue-i18n'
-import CreateVehiclePopup from "@/components/popup/CreateVehiclePopup";
-
-const {t} = useI18n()
+import CreateVehiclePopup from "@/components/popup/CreateVehiclePopup.vue";
 </script>
 <template>
   <div v-if="isUserPopupVisible" class="fixed z-10 w-full h-full flex items-center justify-center">
@@ -125,9 +122,9 @@ const {t} = useI18n()
 </template>
 
 <script>
-import SysAdminMenu from "@/components/commons/menu/SysAdminMenu";
-import CreateUserPopUp from "@/components/popup/CreateUserPopUp";
-import CreateCompanyPopUp from "@/components/popup/CreateCompanyPopUp";
+import SysAdminMenu from "@/components/commons/menu/SysAdminMenu.vue";
+import CreateUserPopUp from "@/components/popup/CreateUserPopUp.vue";
+import CreateCompanyPopUp from "@/components/popup/CreateCompanyPopUp.vue";
 
 export default {
   name: "HomePageContent",

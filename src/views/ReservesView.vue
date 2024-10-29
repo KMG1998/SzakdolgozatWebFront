@@ -7,8 +7,8 @@
 
 <script>
 import { defineComponent } from 'vue';
-import SysAdminMenu from "@/components/commons/menu/SysAdminMenu";
-import SysAdminReservesContent from "@/components/pageContent/reservesPage/SysAdminReservesContent";
+import SysAdminMenu from "@/components/commons/menu/SysAdminMenu.vue";
+import SysAdminReservesContent from "@/components/pageContent/reservesPage/SysAdminReservesContent.vue";
 
 export default defineComponent({
   name: "ReservesView",

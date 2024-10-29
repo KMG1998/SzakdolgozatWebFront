@@ -11,6 +11,5 @@ import HomePageContent from "@/components/pageContent/homePage/HomePageContent.v
 export default defineComponent({
   name: 'HomeView',
   components: {HomePageContent},
-
 });
 </script>

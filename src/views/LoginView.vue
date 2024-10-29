@@ -1,12 +1,6 @@
-
-<script setup>
-import { SemipolarSpinner  } from 'epic-spinners'
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
-</script>
 <template>
     <div
-        class="flex flex-col justify-center items-center px-16 py-12 max-md:px-5 bg-gradient-to-b from-taxi-blue via-taxi-to-color via-75% to-white"
+        class="flex flex-col h-[100vh] pb-10 justify-center items-center max-md:px-5 bg-gradient-to-b from-taxi-blue via-taxi-to-color via-75% to-white"
     >
       <div class="flex w-[351px] max-w-full flex-col items-center mt-7">
         <img
@@ -56,9 +50,15 @@ const { t } = useI18n()
 import { defineComponent } from 'vue';
 import UserService from "@/services/userService";
 import router from "@/router";
+import { SemipolarSpinner } from 'epic-spinners'
+import {Form} from 'vee-validate'
 
 export default defineComponent({
   name: "LoginView",
+  components:{
+    SemipolarSpinner,
+    Form
+  },
   methods:{
     async auth(){
       this.authInProgress = true

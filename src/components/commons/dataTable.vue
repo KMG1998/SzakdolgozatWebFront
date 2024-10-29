@@ -1,31 +1,30 @@
-<script setup>
-import {useI18n} from 'vue-i18n'
-
-const {t} = useI18n()
-</script>
 <template>
-  <table v-if="tableData != undefined">
+  <table v-if="tableData !== undefined">
+    <thead>
     <tr>
       <th
-          v-for="(header, i) in Object.keys(tableData)"
-          :key="`${header}${i}`"
-          class="header-item"
+        v-for="(header, i) in Object.keys(this.tableData[0])"
+        :key="`${header}${i}`"
+        class="header-item"
       >
-        {{ t("`tableHeaders.${headerClass}.${header}`") }}
+        {{this.$t(`tableHeaders.${headerClass}.${header}`) }}
       </th>
     </tr>
+    </thead>
+    <tbody>
     <tr
-        v-for="entity in tableData"
-        :key="`entity-${entity.id}`"
-        class="table-rows"
+      v-for="entity in tableData"
+      :key="`entity-${entity.id}`"
+      class="table-rows"
     >
       <td
-          v-for="(userData, i) in Object.keys(entity)"
-          :key="`${userData}-${i}`"
+        v-for="(userData, i) in entity"
+        :key="`${userData}-${i}`"
       >
         {{ userData }}
       </td>
     </tr>
+    </tbody>
   </table>
 </template>
 
@@ -35,11 +34,8 @@ import {defineComponent} from "vue";
 export default defineComponent({
   name: "dataTable",
   props: {
-    tableData: Object,
+    tableData: Array,
     headerClass: String
   },
-  beforeMount() {
-    console.log(this.tableData)
-  }
 })
 </script>

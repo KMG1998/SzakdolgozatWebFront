@@ -8,8 +8,8 @@
 
 <script>
 import {defineComponent} from 'vue';
-import SysAdminMenu from "@/components/commons/menu/SysAdminMenu";
-import SysAdminUsersContent from "@/components/pageContent/usersPage/SysAdminUserContent";
+import SysAdminMenu from "@/components/commons/menu/SysAdminMenu.vue";
+import SysAdminUsersContent from "@/components/pageContent/usersPage/SysAdminUserContent.vue";
 
 export default defineComponent({
   name: "UsersView",

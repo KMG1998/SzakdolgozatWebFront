@@ -1,7 +1,5 @@
-import {UUID} from "vue-uuid";
-
 type Vehicle = undefined | {
-    id: UUID,
+    id: string,
     seats: number,
     color: string,
     type: string,

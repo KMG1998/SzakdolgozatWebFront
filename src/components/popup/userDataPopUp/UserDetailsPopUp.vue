@@ -48,12 +48,12 @@
 <script>
 import {defineComponent} from "vue";
 import * as User from "@/types/User.ts";
-import UserDetailsVehiclePage from "@/components/popup/userDataPopUp/pages/UserDetailsVehiclePage";
-import UserDetailsCompanyPage from "@/components/popup/userDataPopUp/pages/UserDetailsCompanyPage";
+import UserDetailsVehiclePage from "@/components/popup/userDataPopUp/pages/UserDetailsVehiclePage.vue";
+import UserDetailsCompanyPage from "@/components/popup/userDataPopUp/pages/UserDetailsCompanyPage.vue";
 import CompanyService from "@/services/companyService";
 import VehicleService from "@/services/vehicleService";
-import {useI18n} from 'vue-i18n'
-import UserDetailsUserPage from "@/components/popup/userDataPopUp/pages/UserDetailsUserPage";
+
+import UserDetailsUserPage from "@/components/popup/userDataPopUp/pages/UserDetailsUserPage.vue";
 
 let pages = {
   userPage: UserDetailsUserPage,

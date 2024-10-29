@@ -1,5 +1,5 @@
 import axios from "axios";
-import Company from "../types/Company";
+import * as Company from "../types/Company";
 
 const API_URL = 'http://localhost:8085/company/';
 const axiosClient = axios.create({withCredentials: true})
