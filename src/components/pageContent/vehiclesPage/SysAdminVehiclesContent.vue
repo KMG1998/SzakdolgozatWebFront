@@ -1,6 +1,3 @@
-<script setup>
-import { SemipolarSpinner  } from 'epic-spinners'
-</script>
 <template>
   <div
       class="flex flex-col grow shrink-0 mt-6 whitespace-nowrap basis-0 w-fit max-md:max-w-full"
@@ -17,29 +14,7 @@ import { SemipolarSpinner  } from 'epic-spinners'
     >
       <div class="max-md:max-w-full text-left">Járművek</div>
       <div>
-        <table v-if="vehicleData !== undefined ">
-          <thead>
-          <tr>
-            <th v-for="(header, i) in headers" :key="`${header}${i}`" class="header-item">
-              {{ t('tableHeaders.vehicleTable.'+header) }}
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="entity in vehicleData" :key="`entity-${entity.id}`" class="table-rows">
-            <td v-for="(vehicleData, i) in entity" :key="`${vehicleData}-${i}`">
-              {{ vehicleData }}
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        <div v-else class="flex items-center justify-center pt-2">
-          <semipolar-spinner
-              :animation-duration="2000"
-              :size="80"
-              color="#57A3EF"
-          />
-        </div>
+        <DataTable :table-data="vehicleData" header-class="vehicleTable" />
       </div>
     </div>
   </div>
@@ -48,18 +23,18 @@ import { SemipolarSpinner  } from 'epic-spinners'
 <script>
 
 import VehicleService from "@/services/vehicleService";
+import DataTable from "@/components/commons/DataTable.vue";
 
 export default {
   name: "SysAdminVehiclesContent",
+  components:{DataTable},
   data() {
     return {
-      headers: ['id', 'seats', 'description','type','airCond','available','insuranceId','plateNumber'],
       vehicleData: undefined
     }
   },
   methods: {
     getVehicles: async function () {
-      await new Promise(res => setTimeout(res, 3000))
       this.vehicleData = await VehicleService.getAllVehicles();
     },
   },
@@ -68,7 +43,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-
-</style>

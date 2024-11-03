@@ -1,11 +1,6 @@
-<script setup>
-import {SemipolarSpinner} from 'epic-spinners'
-import DataTable from "@/components/commons/dataTable.vue";
-
-</script>
 <template>
     <PopUp :visiblity-variable="isDetailsPopUpVisible" @toggle="toggleDetailsPopUp">
-      <UserDetailsPopUp :userData="selectedUser"/>
+      <UserDetailsPopUp/>
     </PopUp>
   <div
       class="flex flex-col grow shrink-0 mt-6 whitespace-nowrap basis-0 w-fit max-md:max-w-full"
@@ -22,14 +17,7 @@ import DataTable from "@/components/commons/dataTable.vue";
     >
       <div class="max-md:max-w-full text-left">Felhasználók</div>
       <div>
-        <DataTable :table-data="userData" header-class="userTable" />
-        <div v-if="loading" class="flex items-center justify-center pt-2">
-          <semipolar-spinner
-              :animation-duration="2000"
-              :size="80"
-              color="#57A3EF"
-          />
-        </div>
+        <DataTable :table-data="usersData" header-class="userTable" :on-details-click="toggleDetailsPopUp"/>
       </div>
     </div>
   </div>
@@ -40,28 +28,30 @@ import {defineComponent} from 'vue';
 import UserService from "@/services/userService";
 import PopUp from "@/components/popup/PopUp.vue";
 import UserDetailsPopUp from "@/components/popup/userDataPopUp/UserDetailsPopUp.vue";
+import DataTable from "@/components/commons/DataTable.vue";
+import {useSelectedUserStore} from "@/stores/selectedUser.ts";
 
 export default defineComponent({
   name: "SysAdminUsersContent",
   components:{
-    PopUp,UserDetailsPopUp
+    PopUp,UserDetailsPopUp,DataTable
   },
   data() {
     return {
-      headers: ['id', 'name', 'typeId', 'email'],
-      userData: undefined,
+      usersData: undefined,
       isDetailsPopUpVisible: false,
-      selectedUser: String,
-      loading: true
+      selectedUserStore: useSelectedUserStore()
     }
   },
   methods: {
     getUsers: async function () {
-      this.userData = await UserService.getAllUsers();
-      this.loading = false
+      this.usersData = await UserService.getAllUsers();
     },
-    toggleDetailsPopUp(selectedUser) {
-      this.selectedUser = selectedUser
+    toggleDetailsPopUp: function(selectedUser) {
+      this.selectedUserStore.id = selectedUser.id
+      this.selectedUserStore.name = selectedUser.name
+      this.selectedUserStore.email = selectedUser.email
+      this.selectedUserStore.typeId = selectedUser.typeId
       this.isDetailsPopUpVisible = !this.isDetailsPopUpVisible
     }
 

@@ -1,6 +1,3 @@
-<script setup>
-import CreateVehiclePopup from "@/components/popup/CreateVehiclePopup.vue";
-</script>
 <template>
   <div v-if="isUserPopupVisible" class="fixed z-10 w-full h-full flex items-center justify-center">
     <div @click="toggleUserPopUp" class="bg-gray-500 opacity-60 w-full h-full"/>
@@ -24,7 +21,7 @@ import CreateVehiclePopup from "@/components/popup/CreateVehiclePopup.vue";
             class="bg-white bg-opacity-80 flex flex-col items-stretch w-full mt-6 pt-4 pb-12 rounded-3xl max-md:max-w-full max-md:mt-10"
         >
           <div class="text-black text-xl ml-4 self-start max-md:ml-2.5">
-            {{ t("mainPage.quickActions") }}
+            {{ $t("mainPage.quickActions") }}
           </div>
           <div class="bg-black shrink-0 h-0.5 mt-3 max-md:max-w-full"></div>
           <div class="self-center w-[100%] max-w-full mt-3.5 pl-2 pr-2">
@@ -125,10 +122,11 @@ import CreateVehiclePopup from "@/components/popup/CreateVehiclePopup.vue";
 import SysAdminMenu from "@/components/commons/menu/SysAdminMenu.vue";
 import CreateUserPopUp from "@/components/popup/CreateUserPopUp.vue";
 import CreateCompanyPopUp from "@/components/popup/CreateCompanyPopUp.vue";
+import CreateVehiclePopup from "@/components/popup/CreateVehiclePopup.vue";
 
 export default {
   name: "HomePageContent",
-  components: {SysAdminMenu, CreateUserPopUp,CreateCompanyPopUp},
+  components: {SysAdminMenu, CreateUserPopUp,CreateCompanyPopUp,CreateVehiclePopup},
   methods: {
     toggleUserPopUp() {
       this.isUserPopupVisible = !this.isUserPopupVisible

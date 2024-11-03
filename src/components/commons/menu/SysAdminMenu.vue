@@ -12,16 +12,16 @@ import router from "@/router";</script>
       >
       <div class="text-center mt-10">{{ userName }}</div>
       <div class="mt-11 max-md:mt-10 cursor-pointer" @click="router.push('/users')">
-        {{ this.$t("sideMenu.usersPage") }}
+        {{ $t("sideMenu.usersPage") }}
       </div>
       <div class="mt-11 max-md:mt-10 cursor-pointer" @click="router.push('/vehicles')">
-        {{ this.$t("sideMenu.vehiclesPage") }}
+        {{ $t("sideMenu.vehiclesPage") }}
       </div>
       <div class="mt-11 max-md:mt-10 cursor-pointer" @click="router.push('/reserves')">
-        {{ this.$t("sideMenu.reservationsPage") }}
+        {{ $t("sideMenu.reservationsPage") }}
       </div>
       <div class="mt-10 max-md:mt-10 cursor-pointer" @click="router.push('/companies')">
-        {{ this.$t("sideMenu.companiesPage") }}
+        {{ $t("sideMenu.companiesPage") }}
       </div>
       <div class="h-full"/>
       <img

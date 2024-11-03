@@ -1,6 +1,3 @@
-<script setup>
-import { SemipolarSpinner  } from 'epic-spinners'
-</script>
 <template>
   <div class="flex flex-col grow shrink-0 mt-6 whitespace-nowrap basis-0 w-fit max-md:max-w-full">
     <div class="flex flex-col ml-6 max-w-full w-[100px] max-md:ml-2.5">
@@ -15,29 +12,7 @@ import { SemipolarSpinner  } from 'epic-spinners'
     >
       <div class="max-md:max-w-full text-left">Cégek</div>
       <div>
-        <table v-if="companyData !== undefined ">
-          <thead>
-          <tr>
-            <th v-for="(header, i) in headers" :key="`${header}${i}`" class="header-item">
-              {{ t('tableHeaders.companiesTable.' + header) }}
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="entity in companyData" :key="`entity-${entity.id}`" class="table-rows">
-            <td v-for="(companyData, i) in [entity.id,entity.companyName,entity.officeAddress,entity.officeTel,entity.officeEmail]" :key="`${companyData}-${i}`">
-              {{ companyData }}
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        <div v-else class="flex items-center justify-center pt-2">
-          <semipolar-spinner
-              :animation-duration="2000"
-              :size="80"
-              color="#57A3EF"
-          />
-        </div>
+        <DataTable :table-data="companyData" header-class="companiesTable"/>
       </div>
     </div>
   </div>
@@ -45,20 +20,19 @@ import { SemipolarSpinner  } from 'epic-spinners'
 
 <script>
 import CompanyService from "@/services/companyService";
+import DataTable from "@/components/commons/DataTable.vue";
 
 export default {
   name: "SysAdminCompaniesContent",
+  components:{DataTable},
   data() {
     return {
-      headers: ['id','companyName', 'officeAddress', 'officeTel','officeEmail'],
       companyData: undefined
     }
   },
   methods: {
     getCompanies: async function () {
-      await new Promise(res => setTimeout(res, 3000))
       this.companyData = await CompanyService.getAllCompany()
-      console.log(this.companyData)
     },
   },
   beforeMount() {
@@ -66,7 +40,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-
-</style>
