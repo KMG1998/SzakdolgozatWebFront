@@ -1,5 +1,5 @@
 type User = undefined | {
-    id: string,
+    readonly id: string,
     name:string,
     typeId:number,
     email:string,

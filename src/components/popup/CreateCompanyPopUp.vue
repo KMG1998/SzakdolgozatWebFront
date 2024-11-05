@@ -88,7 +88,7 @@ export default defineComponent( {
   methods:{
     async createCompany(){
       this.createInProgress = true
-      let newCompany = await CompanyService.createCompany(this.name,this.address,this.phone,this.email);
+      const newCompany = await CompanyService.createCompany(this.name,this.address,this.phone,this.email);
       console.log(newCompany)
       this.createInProgress = false
     }

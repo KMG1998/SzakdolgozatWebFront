@@ -51,7 +51,7 @@
                 <div class="flex grow flex-col items-center max-md:mt-10">
                   <img
                       loading="lazy"
-                      src="@/assets/images/new_user_button.png"
+                      src="@/assets/images/user_button.png"
                       class="object-contain object-center w-[100px] fill-white self-center max-w-full cursor-pointer"
                       @click='toggleUserPopUp'
                   />
@@ -66,7 +66,7 @@
                 <div class="flex grow flex-col items-stretch max-md:mt-10">
                   <img
                       loading="lazy"
-                      src="@/assets/images/new_vehicle_button.png"
+                      src="@/assets/images/vehicle_button.png"
                       class="object-contain object-center w-[100px] fill-white self-center max-w-full cursor-pointer"
                       @click='toggleVehiclePopUp'
                   />

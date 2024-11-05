@@ -1,27 +1,37 @@
+<script setup lang="ts">
+import {SemipolarSpinner} from "epic-spinners";
+
+defineProps({
+  tableData: Array,
+  headerClass: String,
+  onDetailsClick: Function,
+})
+</script>
 <template>
-  <table v-if="tableData !== undefined && tableData.length > 0">
+  <table v-if="tableData !== undefined && tableData.length > 0" class="border-2 border-collapse border-black w-full">
     <thead>
     <tr>
       <th
-        v-for="(header, i) in Object.keys(this.tableData[0])"
+        v-for="(header, i) in Object.keys(tableData[0])"
         :key="`${header}${i}`"
-        class="header-item"
+        class="border-2 border-black"
       >
         {{ $t(`tableHeaders.${headerClass}.${header}`) }}
       </th>
+      <th class="border-2 border-black"/>
     </tr>
     </thead>
     <tbody>
     <tr
       v-for="entity in tableData"
       :key="`entity-${entity.id}`"
-      class="table-rows"
+      class="border-2 border-black"
     >
-      <td v-for="(data, i) in entity" :key="`${data}-${i}`">
+      <td v-for="(data, i) in entity" :key="`${data}-${i}`" class="border-2 border-black">
         {{ data }}
       </td>
       <td>
-        <img src="../../assets/images/details_eye.png" @click="onDetailsClick(entity)">
+        <img src="../../assets/images/details_eye.png" @click="onDetailsClick(entity)" class="m-auto cursor-pointer">
       </td>
     </tr>
     </tbody>
@@ -34,18 +44,3 @@
     />
   </div>
 </template>
-
-<script>
-import {defineComponent} from "vue";
-import {SemipolarSpinner} from "epic-spinners";
-
-export default defineComponent({
-  name: "dataTable",
-  components: {SemipolarSpinner},
-  props: {
-    tableData: Array,
-    headerClass: String,
-    onDetailsClick: Function,
-  },
-})
-</script>

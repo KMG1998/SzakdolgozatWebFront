@@ -3,7 +3,6 @@ type Vehicle = undefined | {
     seats: number,
     color: string,
     type: string,
-    airCond: boolean,
     available: boolean,
     plateNumber: string,
     insuranceId?: string

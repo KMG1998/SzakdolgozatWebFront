@@ -1,5 +1,6 @@
 <script setup>
-import router from "@/router";</script>
+import router from "@/router";
+</script>
 <template>
   <div class="relative z-0 h-[100vh] gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0 mr-7">
     <div

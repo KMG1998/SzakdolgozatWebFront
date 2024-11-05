@@ -1,9 +1,3 @@
-<script setup>
-
-import {SemipolarSpinner} from 'epic-spinners'
-
-
-</script>
 <template>
   <div class="fixed top-[15%] left-[25%] flex flex-col items-center py-4 bg-white rounded-3xl z-100">
     <form @submit.prevent>
@@ -99,7 +93,7 @@ export default {
   name: "CreateVehiclePopup",
   methods: {
     async createVehicle() {
-      let newVehicle = await VehicleService.createVehicle(this.seats, this.plateNum, this.carType, this.airCond);
+      const newVehicle = await VehicleService.createVehicle(this.seats, this.plateNum, this.carType, this.airCond);
       console.log(newVehicle)
       if (newVehicle !== undefined) {
         this.createInProgress = false

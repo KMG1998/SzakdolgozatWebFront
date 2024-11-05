@@ -27,7 +27,7 @@ const i18n = createI18n({
                     seats:'Ülések száma',
                     description:'Típus',
                     type:'Típus',
-                    airCond:'Légkondícionáló',
+                    color:'Szín',
                     available:'Elérhető',
                     insuranceId:'Biztosítás azonosító',
                     plateNumber:'Rendszám',

@@ -69,7 +69,7 @@ class UserService {
 
     async getAllUsers() {
         try {
-            let response = await axiosClient
+            const response = await axiosClient
                 .get(API_URL + 'allUsers');
             if (response.data) {
                 const users = Array<User>();
@@ -103,18 +103,22 @@ class UserService {
                         toastStyle: {"background-color": "#ed4e42", "color": "#ffffff"}
                     });
                 }
+                return null
             }
             return null
         })
     }
 
-    async updateUser(user:User): Promise<boolean>{
-        axiosClient.post(API_URL+'updateUser',{userData:JSON.stringify(user)}).then(
+    async updateUser(user:User): Promise<User|undefined>{
+        let updatedUser = undefined
+        await axiosClient.post(API_URL+'updateUser',{userData:JSON.stringify(user)}).then(
             resp => {
-                return resp.data as boolean;
+              if(resp.data) {
+                updatedUser =  resp.data as User;
+              }
             }
         ).catch(err => console.log(err))
-        return false
+        return updatedUser
     }
 }
 

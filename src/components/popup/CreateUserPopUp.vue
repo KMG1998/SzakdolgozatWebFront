@@ -1,5 +1,3 @@
-<script setup>
-import {SemipolarSpinner} from 'epic-spinners'</script>
 <template>
   <div class="fixed top-[15%] left-[25%] flex flex-col items-center py-4 bg-white rounded-3xl z-100">
     <form @submit.prevent>
@@ -154,12 +152,12 @@ export default defineComponent({
   methods: {
     async createUser() {
       this.createInProgress = true
-      let newUser = await UserService.createUser(this.email, this.passw, this.nameOfUser, this.userType);
+      const newUser = await UserService.createUser(this.email, this.passw, this.nameOfUser, this.userType);
       if (this.userType == 3 && newUser != undefined) {
-        let newVehicle = await VehicleService.createVehicle(this.seats, this.plateNum, this.carType, this.airCond);
+        const newVehicle = await VehicleService.createVehicle(this.seats, this.plateNum, this.carType, this.airCond);
         console.log(newVehicle)
         if (newVehicle !== undefined) {
-          let resp = await VehicleService.connectUserToVehicle(newUser.id, newVehicle.id)
+          const resp = await VehicleService.connectUserToVehicle(newUser.id, newVehicle.id)
           if (resp === 200) {
             this.createInProgress = false
             alert("Sikeres létrehozás")

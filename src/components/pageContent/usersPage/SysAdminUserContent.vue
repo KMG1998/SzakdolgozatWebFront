@@ -48,10 +48,7 @@ export default defineComponent({
       this.usersData = await UserService.getAllUsers();
     },
     toggleDetailsPopUp: function(selectedUser) {
-      this.selectedUserStore.id = selectedUser.id
-      this.selectedUserStore.name = selectedUser.name
-      this.selectedUserStore.email = selectedUser.email
-      this.selectedUserStore.typeId = selectedUser.typeId
+      this.selectedUserStore.selectedUser = selectedUser
       this.isDetailsPopUpVisible = !this.isDetailsPopUpVisible
     }
 

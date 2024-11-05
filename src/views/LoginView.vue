@@ -8,7 +8,7 @@
             src="../assets/images/magantaxi_logo.png"
             class="aspect-square object-contain object-center w-[319px] max-w-full"
         />
-        <Form>
+        <form>
           <div class="mt-2">
             <label for="email" class="text-black text-sm mt-14 max-md:mt-10">E-mail</label>
             <input id="email"
@@ -36,7 +36,7 @@
                 color="#57A3EF"
             />
           </div>
-        </Form>
+        </form>
         <div
             class="text-black text-sm underline whitespace-nowrap mt-14 max-md:mt-10"
         >
@@ -51,13 +51,11 @@ import { defineComponent } from 'vue';
 import UserService from "@/services/userService";
 import router from "@/router";
 import { SemipolarSpinner } from 'epic-spinners'
-import {Form} from 'vee-validate'
 
 export default defineComponent({
   name: "LoginView",
   components:{
     SemipolarSpinner,
-    Form
   },
   methods:{
     async auth(){

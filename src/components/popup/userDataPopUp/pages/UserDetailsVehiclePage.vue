@@ -17,7 +17,7 @@
                  type="number"
                  placeholder="ülések száma"
                  aria-describedby="seatsHelp"
-                 v-model="vehicle.seats">
+                 :value="selectedUserStore.userVehicle.seats">
           <label for="plateNum" class="mt-6 text-xl text-center text-black">
             rendszám
           </label>
@@ -26,7 +26,7 @@
                  type="text"
                  placeholder="rendszám"
                  aria-describedby="plateNumHelp"
-                 v-model="vehicle.plateNumber">
+                 :value="selectedUserStore.userVehicle.plateNumber">
           <label for="carType" class="mt-6 text-xl text-center text-black">
             típus
           </label>
@@ -35,31 +35,16 @@
                  type="text"
                  placeholder="jármű típus"
                  aria-describedby="carTypeHelp"
-                 v-model="vehicle.type">
+                 :value="selectedUserStore.userVehicle.type">
           <label for="airCond" class="mt-6 text-xl text-center text-black">
-            légkondi
+            szín
           </label>
-          <div
-              id="airCond"
-              class="flex gap-10 justify-center items-stretch mt-5 max-w-full"
-          >
-            <div>
-              <label for="airCondYes" class="mt-6 text-xl text-center text-black">
-                Igen
-              </label>
-              <input id="airCondYes" type="radio" :value=true name="airCond" class="h-[15px] w-[15px]"
-                     v-model="vehicle.airCond"
-                     :disabled="!editInProgress && !vehicle.airCond">
-            </div>
-            <div>
-              <label for="airCondNo" class="mt-6 text-xl text-center text-black">
-                Nem
-              </label>
-              <input id="airCondNo" type="radio" :value=false :disabled="!editInProgress && vehicle.airCond" name="airCond"
-                     class="h-[15px] w-[15px]"
-                     v-model="vehicle.airCond">
-            </div>
-          </div>
+          <input id="carColor"
+                 class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
+                 type="text"
+                 placeholder="jármű színe"
+                 aria-describedby="carColorHelp"
+                 :value="selectedUserStore.userVehicle.color">
         </div>
       </div>
     </div>
@@ -68,6 +53,7 @@
 
 <script>
 import * as Vehicle from "@/types/Vehicle.ts";
+import {useSelectedUserStore} from "@/stores/selectedUser.ts";
 
 export default {
   name: "UserDetailsVehiclePage",
@@ -76,12 +62,9 @@ export default {
   },
   data: function () {
     return {
-      editInProgress:false
+      editInProgress:false,
+      selectedUserStore: useSelectedUserStore()
     }
   },
 }
 </script>
-
-<style scoped>
-
-</style>

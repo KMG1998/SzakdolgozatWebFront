@@ -1,20 +1,20 @@
 <template>
-  <div class="fixed flex flex-col items-center py-4 bg-white rounded-3xl opacity-100 z-50">
+  <div v-if="!selectedUserStore.saveInProgress" class="fixed flex flex-col items-center py-4 bg-white rounded-3xl opacity-100 z-50">
     <div
       class="gap-5 flex flex-row mb-2 max-md:items-stretch max-md:gap-0"
-      v-if="selectedUserStore.typeId === 3 || selectedUserStore.typeId === 4"
+      v-if="selectedUserStore.selectedUser.typeId === 3 || selectedUserStore.selectedUser.typeId === 4"
     >
       <div class="flex grow flex-col items-center" @click="selectedPage = modalPages.userPage">
         <img
           loading="lazy"
-          src="@/assets/images/new_user_button.png"
+          src="@/assets/images/user_button.png"
           class="rounded-full border-2 border-black drop-shadow-md w-[70px] fill-white self-center cursor-pointer"
         />
       </div>
       <div
         class="flex flex-col items-stretch"
         @click="selectedPage = modalPages.companyPage"
-        v-if="companyData"
+        v-if="selectedUserStore.selectedUser.typeId === 4"
       >
         <div
           class="flex grow flex-col items-center"
@@ -33,15 +33,22 @@
         <div class="flex grow flex-col items-stretch max-md:mt-10">
           <img
             loading="lazy"
-            src="@/assets/images/new_vehicle_button.png"
+            src="@/assets/images/vehicle_button.png"
             class="rounded-full border-2 border-black drop-shadow-md w-[70px] fill-white self-center cursor-pointer"
           />
         </div>
       </div>
     </div>
     <UserDetailsUserPage v-if="selectedPage === modalPages.userPage"/>
-    <UserDetailsVehiclePage :vehicle=vehicleData v-if="selectedPage === modalPages.vehiclesPage"/>
-    <UserDetailsCompanyPage :company=companyData v-if="selectedPage === modalPages.companyPage"/>
+    <UserDetailsVehiclePage v-if="selectedPage === modalPages.vehiclesPage"/>
+    <UserDetailsCompanyPage v-if="selectedPage === modalPages.companyPage"/>
+  </div>
+  <div v-else class="fixed flex items-center bg-white rounded-full p-2 justify-center opacity-100 z-50">
+    <semipolar-spinner
+      :animation-duration="2000"
+      :size="70"
+      color="#57A3EF"
+    />
   </div>
 </template>
 
@@ -53,10 +60,11 @@ import CompanyService from "@/services/companyService";
 import VehicleService from "@/services/vehicleService";
 import UserDetailsUserPage from "@/components/popup/userDataPopUp/pages/UserDetailsUserPage.vue";
 import {useSelectedUserStore} from "@/stores/selectedUser.ts";
+import { SemipolarSpinner } from 'epic-spinners'
 
 export default defineComponent({
   name: "UserDetailsPopUp",
-  components: {UserDetailsUserPage, UserDetailsVehiclePage, UserDetailsCompanyPage},
+  components: {UserDetailsUserPage, UserDetailsVehiclePage, UserDetailsCompanyPage,SemipolarSpinner},
   data() {
     return {
       vehicleData: undefined,
@@ -73,12 +81,12 @@ export default defineComponent({
   methods: {
     getAdditionalData: async function () {
       this.selectedPage = this.modalPages.userPage
-      if (this.selectedUserStore.typeId === 3) {
-        this.vehicleData = await VehicleService.getVehicleByDriver(this.selectedUserStore.id)
+      if (this.selectedUserStore.selectedUser.typeId === 3) {
+        this.selectedUserStore.userVehicle = await VehicleService.getVehicleByDriver(this.selectedUserStore.selectedUser.id)
       }
-      if (this.selectedUserStore.typeId === 4) {
-        this.vehicleData = await VehicleService.getVehicleByDriver(this.selectedUserStore.id)
-        this.companyData = await CompanyService.getCompanyByWorker(this.selectedUserStore.id)
+      if (this.selectedUserStore.selectedUser.typeId === 4) {
+        this.selectedUserStore.userVehicle = await VehicleService.getVehicleByDriver(this.selectedUserStore.selectedUser.id)
+        this.selectedUserStore.userCompany = await CompanyService.getCompanyByWorker(this.selectedUserStore.selectedUser.id)
       }
     }
   },
