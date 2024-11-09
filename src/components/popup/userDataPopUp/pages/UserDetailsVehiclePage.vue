@@ -2,6 +2,7 @@
   <form>
     <div
         class="flex flex-col items-stretch w-[50%] min-w-[500px] max-md:ml-0 max-md:w-full px-[10px]"
+        v-if="selectedUserStore.userVehicle !== undefined"
     >
       <div class="flex flex-col items-stretch max-md:mt-10">
         <div class="text-xl text-black font-bold">jármű adatai</div>
@@ -48,18 +49,17 @@
         </div>
       </div>
     </div>
+    <div v-else class="flex flex-col items-stretch px-[10px]">
+      <div class="text-xl text-black font-bold">jármű hozzárendelése</div>
+    </div>
   </form>
 </template>
 
 <script>
-import * as Vehicle from "@/types/Vehicle.ts";
 import {useSelectedUserStore} from "@/stores/selectedUser.ts";
 
 export default {
   name: "UserDetailsVehiclePage",
-  props: {
-    vehicle: Vehicle
-  },
   data: function () {
     return {
       editInProgress:false,

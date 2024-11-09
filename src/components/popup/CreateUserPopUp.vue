@@ -1,6 +1,6 @@
 <template>
-  <div class="fixed top-[15%] left-[25%] flex flex-col items-center py-4 bg-white rounded-3xl z-100">
-    <form @submit.prevent>
+  <div class="fixed flex flex-col items-center py-4 bg-white rounded-3xl opacity-100 z-50">
+    <Form @submit.prevent>
       <div class="w-full min-w-[500px] max-md:max-w-full px-[10px]">
         <div class="flex gap-5 max-md:flex-col max-md:gap-0 max-md:items-stretch text-center">
           <div
@@ -15,12 +15,12 @@
                 >
                   felhasználó e-mail
                 </label>
-                <input id="email"
+                <Field name="email" type="email" v-model="email"
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
-                       type="text"
                        placeholder="E-mail"
-                       aria-describedby="emailHelp"
-                       v-model="email">
+                       aria-describedby="emailHelp">
+                </Field>
+
                 <label for="name" class="self-center mt-6 text-xl text-center text-black whitespace-nowrap">
                   felhasználó neve
                 </label>
@@ -58,68 +58,6 @@
               </div>
             </div>
           </div>
-          <div
-            class="flex flex-col items-stretch ml-5 w-[50%] min-w-[450px] max-md:ml-0 max-md:w-full"
-            v-if="userType == 3"
-          >
-            <div class="flex flex-col items-stretch max-md:mt-10">
-              <div class="text-xl text-black">új jármű adatai</div>
-              <div class="flex flex-col items-center mt-9 max-md:pl-5">
-                <label
-                  for="seats"
-                  class=" text-xl text-center text-black whitespace-nowrap"
-                >
-                  ülések száma
-                </label>
-                <input id="seats"
-                       class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 px-3 rounded-3xl border-2 border-solid border-black text-center"
-                       type="number"
-                       placeholder="ülések száma"
-                       aria-describedby="seatsHelp"
-                       v-model="seats">
-                <label for="plateNum" class="mt-6 text-xl text-center text-black">
-                  rendszám
-                </label>
-                <input id="plateNum"
-                       class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
-                       type="text"
-                       placeholder="rendszám"
-                       aria-describedby="plateNumHelp"
-                       v-model="plateNum">
-                <label for="carType" class="mt-6 text-xl text-center text-black">
-                  típus
-                </label>
-                <input id="carType"
-                       class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
-                       type="text"
-                       placeholder="jármű típus"
-                       aria-describedby="carTypeHelp"
-                       v-model="carType">
-                <label for="airCond" class="mt-6 text-xl text-center text-black">
-                  légkondi
-                </label>
-                <div
-                  id="airCond"
-                  class="flex gap-10 justify-center items-stretch mt-5 max-w-full"
-                >
-                  <div>
-                    <label for="airCondYes" class="mt-6 text-xl text-center text-black">
-                      Igen
-                    </label>
-                    <input id="airCondYes" type="radio" :value=true name="airCond" class="h-[15px] w-[15px]"
-                           v-model="airCond">
-                  </div>
-                  <div>
-                    <label for="airCondNo" class="mt-6 text-xl text-center text-black">
-                      Nem
-                    </label>
-                    <input id="airCondNo" type="radio" :value=false name="airCond" class="h-[15px] w-[15px]"
-                           v-model="airCond">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div
@@ -138,47 +76,41 @@
           color="#57A3EF"
         />
       </div>
-    </form>
+    </Form>
   </div>
 </template>
 
-<script>
-import {defineComponent} from "vue";
+<script setup lang="ts">
 import UserService from "@/services/userService";
-import VehicleService from "@/services/vehicleService";
+import {ref} from "vue";
+import {SemipolarSpinner} from "epic-spinners";
+import {toast, ToastOptions} from "vue3-toastify";
+import {useI18n} from "vue-i18n";
+import ToastConfigs from "@/utils/toastConfigs";
+import {Field, Form} from "vee-validate"
 
-export default defineComponent({
-  name: "CreateUserPopUp",
-  methods: {
-    async createUser() {
-      this.createInProgress = true
-      const newUser = await UserService.createUser(this.email, this.passw, this.nameOfUser, this.userType);
-      if (this.userType == 3 && newUser != undefined) {
-        const newVehicle = await VehicleService.createVehicle(this.seats, this.plateNum, this.carType, this.airCond);
-        console.log(newVehicle)
-        if (newVehicle !== undefined) {
-          const resp = await VehicleService.connectUserToVehicle(newUser.id, newVehicle.id)
-          if (resp === 200) {
-            this.createInProgress = false
-            alert("Sikeres létrehozás")
-          }
-        }
-      }
-      this.createInProgress = false
-    }
-  },
-  data: function () {
-    return {
-      createInProgress: false,
-      userType: 0,
-      passw: "",
-      email: "",
-      nameOfUser: "",
-      seats: null,
-      plateNum: "",
-      carType: "",
-      airCond: -1,
-    }
-  }
+const {t} = useI18n()
+
+const props = defineProps({
+  toggleFunction: Function,
 })
+
+const createInProgress = ref(false)
+const userType = ref(0)
+const passw = ref("")
+const email = ref("")
+const nameOfUser = ref("")
+
+async function createUser() {
+  createInProgress.value = true
+  const newUser = await UserService.createUser(email.value, passw.value, nameOfUser.value, userType.value);
+  console.log(newUser)
+  if (newUser) {
+    props.toggleFunction()
+    toast(t("toastMessages.createSuccess"), ToastConfigs.successToastConfig as ToastOptions)
+    return
+  }
+  toast(t("toastMessages.createFail"), ToastConfigs.errorToastConfig as ToastOptions)
+  createInProgress.value = false
+}
 </script>

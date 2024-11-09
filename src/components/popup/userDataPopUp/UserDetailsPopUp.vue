@@ -1,8 +1,9 @@
 <template>
-  <div v-if="!selectedUserStore.saveInProgress" class="fixed flex flex-col items-center py-4 bg-white rounded-3xl opacity-100 z-50">
+  <div v-if="!selectedUserStore.saveInProgress"
+       class="fixed flex flex-col items-center py-4 bg-white rounded-3xl opacity-100 z-50">
     <div
       class="gap-5 flex flex-row mb-2 max-md:items-stretch max-md:gap-0"
-      v-if="selectedUserStore.selectedUser.typeId === 3 || selectedUserStore.selectedUser.typeId === 4"
+      v-if="(selectedUserStore.selectedUser.typeId === 3 || selectedUserStore.selectedUser.typeId === 4) && !selectedUserStore.deleteStarted && !selectedUserStore.editStarted"
     >
       <div class="flex grow flex-col items-center" @click="selectedPage = modalPages.userPage">
         <img
@@ -21,7 +22,7 @@
         >
           <img
             loading="lazy"
-            src="@/assets/images/new_comp_button.png"
+            src="@/assets/images/company_button.png"
             class="rounded-full border-2 border-black drop-shadow-md w-[70px] fill-white self-center cursor-pointer"
           />
         </div>
@@ -30,13 +31,11 @@
         class="flex flex-col items-stretch max-md:w-full max-md:ml-0"
         @click="selectedPage = modalPages.vehiclesPage"
       >
-        <div class="flex grow flex-col items-stretch max-md:mt-10">
           <img
             loading="lazy"
             src="@/assets/images/vehicle_button.png"
             class="rounded-full border-2 border-black drop-shadow-md w-[70px] fill-white self-center cursor-pointer"
           />
-        </div>
       </div>
     </div>
     <UserDetailsUserPage v-if="selectedPage === modalPages.userPage"/>
@@ -51,47 +50,36 @@
     />
   </div>
 </template>
-
-<script>
-import {defineComponent} from "vue";
+<script setup lang="ts">
+import UserDetailsUserPage from "@/components/popup/userDataPopUp/pages/UserDetailsUserPage.vue";
 import UserDetailsVehiclePage from "@/components/popup/userDataPopUp/pages/UserDetailsVehiclePage.vue";
 import UserDetailsCompanyPage from "@/components/popup/userDataPopUp/pages/UserDetailsCompanyPage.vue";
-import CompanyService from "@/services/companyService";
+import {useSelectedUserStore} from "@/stores/selectedUser";
 import VehicleService from "@/services/vehicleService";
-import UserDetailsUserPage from "@/components/popup/userDataPopUp/pages/UserDetailsUserPage.vue";
-import {useSelectedUserStore} from "@/stores/selectedUser.ts";
-import { SemipolarSpinner } from 'epic-spinners'
+import CompanyService from "@/services/companyService";
+import {onBeforeMount, ref} from "vue";
+import {SemipolarSpinner} from 'epic-spinners'
 
-export default defineComponent({
-  name: "UserDetailsPopUp",
-  components: {UserDetailsUserPage, UserDetailsVehiclePage, UserDetailsCompanyPage,SemipolarSpinner},
-  data() {
-    return {
-      vehicleData: undefined,
-      companyData: undefined,
-      modalPages: {
-        userPage: UserDetailsUserPage,
-        vehiclesPage: UserDetailsVehiclePage,
-        companyPage: UserDetailsCompanyPage
-      },
-      selectedPage: undefined,
-      selectedUserStore: useSelectedUserStore()
-    }
-  },
-  methods: {
-    getAdditionalData: async function () {
-      this.selectedPage = this.modalPages.userPage
-      if (this.selectedUserStore.selectedUser.typeId === 3) {
-        this.selectedUserStore.userVehicle = await VehicleService.getVehicleByDriver(this.selectedUserStore.selectedUser.id)
-      }
-      if (this.selectedUserStore.selectedUser.typeId === 4) {
-        this.selectedUserStore.userVehicle = await VehicleService.getVehicleByDriver(this.selectedUserStore.selectedUser.id)
-        this.selectedUserStore.userCompany = await CompanyService.getCompanyByWorker(this.selectedUserStore.selectedUser.id)
-      }
-    }
-  },
-  beforeMount() {
-    this.getAdditionalData()
-  },
+enum modalPages{
+  userPage = 1,
+  vehiclesPage = 2,
+  companyPage = 3
+}
+
+let selectedPage = ref(modalPages.userPage)
+const selectedUserStore = useSelectedUserStore()
+
+onBeforeMount(() => {
+  getAdditionalData()
 })
+
+async function getAdditionalData() {
+  if (selectedUserStore.selectedUser.typeId === 3) {
+    selectedUserStore.userVehicle = await VehicleService.getVehicleByDriver(selectedUserStore.selectedUser.id)
+  }
+  if (selectedUserStore.selectedUser.typeId === 4) {
+    selectedUserStore.userVehicle = await VehicleService.getVehicleByDriver(selectedUserStore.selectedUser.id)
+    selectedUserStore.userCompany = await CompanyService.getCompanyByWorker(selectedUserStore.selectedUser.id)
+  }
+}
 </script>

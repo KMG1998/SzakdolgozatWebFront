@@ -1,5 +1,5 @@
 <template>
-    <PopUp :visiblity-variable="isDetailsPopUpVisible" @toggle="toggleDetailsPopUp">
+    <PopUp :visiblity-variable="selectedUserStore.popUpVisible" @toggle="selectedUserStore.popUpToggleFunction">
       <UserDetailsPopUp/>
     </PopUp>
   <div
@@ -39,7 +39,6 @@ export default defineComponent({
   data() {
     return {
       usersData: undefined,
-      isDetailsPopUpVisible: false,
       selectedUserStore: useSelectedUserStore()
     }
   },
@@ -49,12 +48,16 @@ export default defineComponent({
     },
     toggleDetailsPopUp: function(selectedUser) {
       this.selectedUserStore.selectedUser = selectedUser
-      this.isDetailsPopUpVisible = !this.isDetailsPopUpVisible
+      this.selectedUserStore.popUpVisible = !this.selectedUserStore.popUpVisible
+      if(!this.selectedUserStore.popUpVisible){
+        this.getUsers()
+      }
     }
 
   },
   beforeMount() {
     this.getUsers();
+    this.selectedUserStore.popUpToggleFunction = this.toggleDetailsPopUp
   },
 })
 </script>

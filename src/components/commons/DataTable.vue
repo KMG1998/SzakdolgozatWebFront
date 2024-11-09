@@ -30,7 +30,7 @@ defineProps({
       <td v-for="(data, i) in entity" :key="`${data}-${i}`" class="border-2 border-black">
         {{ data }}
       </td>
-      <td>
+      <td class="min-w-[40px]">
         <img src="../../assets/images/details_eye.png" @click="onDetailsClick(entity)" class="m-auto cursor-pointer">
       </td>
     </tr>

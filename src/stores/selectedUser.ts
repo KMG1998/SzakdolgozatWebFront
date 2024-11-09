@@ -9,5 +9,8 @@ export const useSelectedUserStore = defineStore('selectedUser', {
       userVehicle: undefined as Vehicle,
       userCompany: undefined as Company,
       saveInProgress: false,
+      editStarted: false,
+      deleteStarted: false,
+      popUpToggleFunction:Function
   }),
 })
