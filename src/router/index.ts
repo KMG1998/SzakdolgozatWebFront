@@ -46,8 +46,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, _) => {
-  if(cookies.get('authenticated')  != 'true' && to.name != 'login')
+  if(cookies.get('authenticated')  !== 'true' && to.name !== 'login')
     return {name:'login'}
+  if(cookies.get('authenticated')  === 'true' && to.name === 'login')
+    return {name:'home'}
 })
 
 export default router

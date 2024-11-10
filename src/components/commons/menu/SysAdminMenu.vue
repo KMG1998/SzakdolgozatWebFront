@@ -26,9 +26,10 @@ import router from "@/router";
       </div>
       <div class="h-full"/>
       <img
-        class="object-contain object-center w-[92px] fill-black"
+        class="object-contain object-center w-[92px] fill-black cursor-pointer"
         loading="lazy"
-        src="https://cdn.builder.io/api/v1/image/assets/TEMP/2142fb626b47add1e5b64bf99c1521943cae418263d6643a2f61a94bcf9ade63?apiKey=e5f87d76f51449099bc2390e0669341c&"
+        src="../../../assets/images/log_out.png"
+        @click="logOut"
       >
     </div>
   </div>
@@ -36,6 +37,9 @@ import router from "@/router";
 
 <script>
 import {defineComponent} from 'vue'
+import UserService from "@/services/userService.ts";
+import {toast} from "vue3-toastify";
+import ToastConfigs from "@/utils/toastConfigs.ts";
 
 export default defineComponent({
   name: 'SysAdminMenu',
@@ -45,8 +49,13 @@ export default defineComponent({
     }
   },
   methods: {
-    logOut() {
-      //TODO log out user
+    async logOut() {
+      if(await UserService.logOut()){
+        window.localStorage.clear()
+        await router.push('/login')
+        return
+      }
+      toast('Sikertelen kijelentkezés',ToastConfigs.errorToastConfig)
     },
   }
 });

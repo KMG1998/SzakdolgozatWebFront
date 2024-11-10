@@ -40,7 +40,6 @@
                    class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                    type="text"
                    placeholder="E-mail"
-                   aria-describedby="emailHelp"
                    :readonly="!userDataStore.editStarted"
                    v-model="userEmail"
             >
@@ -51,7 +50,6 @@
                    class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                    type="text"
                    placeholder="név"
-                   aria-describedby="nameHelp"
                    :readonly="!userDataStore.editStarted"
                    :value="userName">
             <label for="userType" class="self-center mt-6 text-xl text-center text-black">

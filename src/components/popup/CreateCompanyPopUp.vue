@@ -22,7 +22,6 @@ import { SemipolarSpinner  } from 'epic-spinners'
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                        type="text"
                        placeholder="E-mail"
-                       aria-describedby="emailHelp"
                        v-model="email">
                 <label for="name" class="self-center mt-6 text-xl text-center text-black whitespace-nowrap">
                   cég neve
@@ -31,7 +30,6 @@ import { SemipolarSpinner  } from 'epic-spinners'
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                        type="text"
                        placeholder="név"
-                       aria-describedby="nameHelp"
                        v-model="name">
                 <label
                     class="self-center mt-6 text-xl text-center text-black whitespace-nowrap"
@@ -42,7 +40,6 @@ import { SemipolarSpinner  } from 'epic-spinners'
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                        type="phone"
                        placeholder="telefon"
-                       aria-describedby="phoneHelp"
                        v-model="phone">
                 <label
                     class="self-center mt-6 text-xl text-center text-black whitespace-nowrap"
@@ -53,7 +50,6 @@ import { SemipolarSpinner  } from 'epic-spinners'
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                        type="text"
                        placeholder="telephely"
-                       aria-describedby="phoneHelp"
                        v-model="address">
               </div>
             </div>

@@ -47,6 +47,11 @@ const i18n = createI18n({
         saveFail:'Sikertelen mentés',
         deleteSuccess:'Sikeres törlés',
         deleteFail:'Sikertelen törlés',
+      },
+      inputValidation:{
+        requiredField:'Kötelező mező',
+        formatError:'Hibás formátum',
+        minLength:'Legalább {length} karakter hosszúnak kell lennie'
       }
     },
   }

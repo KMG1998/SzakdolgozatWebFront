@@ -19,7 +19,6 @@
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 px-3 rounded-3xl border-2 border-solid border-black text-center"
                        type="number"
                        placeholder="ülések száma"
-                       aria-describedby="seatsHelp"
                        v-model="seats">
                 <label for="plateNum" class="mt-6 text-xl text-center text-black">
                   rendszám
@@ -28,7 +27,6 @@
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                        type="text"
                        placeholder="rendszám"
-                       aria-describedby="plateNumHelp"
                        v-model="plateNum">
                 <label for="carType" class="mt-6 text-xl text-center text-black">
                   típus
@@ -37,7 +35,6 @@
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                        type="text"
                        placeholder="jármű típus"
-                       aria-describedby="carTypeHelp"
                        v-model="carType">
                 <label for="airCond" class="mt-6 text-xl text-center text-black">
                   légkondi

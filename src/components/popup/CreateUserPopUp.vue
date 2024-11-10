@@ -18,7 +18,6 @@
                 <Field name="email" type="email" v-model="email"
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                        placeholder="E-mail"
-                       aria-describedby="emailHelp">
                 </Field>
 
                 <label for="name" class="self-center mt-6 text-xl text-center text-black whitespace-nowrap">
@@ -28,7 +27,6 @@
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                        type="text"
                        placeholder="név"
-                       aria-describedby="nameHelp"
                        v-model="nameOfUser">
                 <label
                   class="self-center mt-6 text-xl text-center text-black whitespace-nowrap"
@@ -39,7 +37,6 @@
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                        type="password"
                        placeholder="jelszó"
-                       aria-describedby="passwordHelp"
                        v-model="passw">
                 <label for="userType" class="self-center mt-6 text-xl text-center text-black">
                   típus

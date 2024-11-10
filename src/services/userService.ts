@@ -8,43 +8,39 @@ const API_URL = 'http://localhost:8085/user/';
 const axiosClient = axios.create({withCredentials: true})
 
 class UserService {
+  export
+  default
+  new
+
   async login(email: string, password: string): Promise<boolean | null> {
-    return axiosClient.post(API_URL + 'signInAdmin', {
+    let success = false
+    await axiosClient.post(API_URL + 'signInAdmin', {
       email: email,
       password: password
     }).then(response => {
       if (response.data) {
         window.localStorage.setItem('userData', JSON.stringify(response.data as User))
-        return true;
+        success = true;
       }
-      return false;
     }).catch((err) => {
         if (err instanceof AxiosError && err.response) {
           if (err.response.status === 400) {
-            toast('YA FUCKED UP', {
-              position: toast.POSITION.BOTTOM_LEFT,
-              autoClose: 2000,
-              type: "error",
-              transition: "slide",
-              hideProgressBar: true,
-              icon: false,
-              toastStyle: {"background-color": "#ed4e42", "color": "#ffffff"}
-            });
+            toast('Hibás adatok', ToastConfigs.errorToastConfig);
           }
         }
-        return null
       }
     )
+    return success
   }
 
   async createUser(email: string, password: string, name: string, userType: number): Promise<string | undefined> {
     let newUserId = undefined
     await axiosClient.post(API_URL + 'create', {
-        email: email,
-        password: password,
-        name: name,
-        type: userType
-      })
+      email: email,
+      password: password,
+      name: name,
+      type: userType
+    })
       .then(response => {
         if (response.data) {
           newUserId = response.data
@@ -52,7 +48,7 @@ class UserService {
       }).catch(err => {
         if (err instanceof AxiosError && err.response) {
           if (err.response.status === 400) {
-            toast(err.response.statusText,ToastConfigs.errorToastConfig);
+            toast(err.response.statusText, ToastConfigs.errorToastConfig);
           }
         }
       });
@@ -76,29 +72,20 @@ class UserService {
   }
 
   async getUser(userId: string): Promise<User | null> {
-    return axiosClient.post(API_URL + 'getUser', {userId: userId}).then(response => {
+    let ret = null
+    await axiosClient.post(API_URL + 'getUser', {userId: userId}).then(response => {
         if (response.data) {
-          return response.data as User
+          ret = response.data as User
         }
-        return null
       }
     ).catch(err => {
       if (err instanceof AxiosError && err.response) {
         if (err.response.status === 400) {
-          toast(err.response.statusText, {
-            position: toast.POSITION.BOTTOM_LEFT,
-            autoClose: 2000,
-            type: "error",
-            transition: "slide",
-            hideProgressBar: true,
-            icon: false,
-            toastStyle: {"background-color": "#ed4e42", "color": "#ffffff"}
-          });
+          toast(err.response.statusText, ToastConfigs.errorToastConfig);
         }
-        return null
       }
-      return null
     })
+    return ret
   }
 
   async updateUser(user: User): Promise<User | undefined> {
@@ -122,6 +109,17 @@ class UserService {
       }
     }).catch(err => toast(err.message, ToastConfigs.errorToastConfig))
     return success;
+  }
+
+  async logOut(): Promise<boolean> {
+    let success = false
+    await axiosClient.post(API_URL + 'logOut').then((resp) => {
+      if (resp.status === 200) {
+        success = true
+      }
+    }).catch(err => {
+    })
+    return success
   }
 }
 
