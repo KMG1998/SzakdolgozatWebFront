@@ -15,10 +15,9 @@
                 >
                   felhasználó e-mail
                 </label>
-                <Field name="email" type="email" v-model="email"
+                <input name="email" type="email" v-model="email"
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
-                       placeholder="E-mail"
-                </Field>
+                       placeholder="E-mail">
 
                 <label for="name" class="self-center mt-6 text-xl text-center text-black whitespace-nowrap">
                   felhasználó neve

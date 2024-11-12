@@ -2,15 +2,28 @@ import axios, {AxiosError} from "axios";
 import * as User from "../types/User";
 import {toast} from 'vue3-toastify';
 import ToastConfigs from "@/utils/toastConfigs";
+import router from "@/router";
+import i18n from "@/utils/lang";
 
 
 const API_URL = 'http://localhost:8085/user/';
 const axiosClient = axios.create({withCredentials: true})
 
 class UserService {
-  export
-  default
-  new
+  constructor() {
+    const {t} = i18n.global
+    axiosClient.interceptors.response.use(response => {
+      return response;
+    }, (error) => {
+      if (error.status === 401) {
+        router.push({name: 'login'}).then(r => {
+          toast(t('toastMessages.pleaseLogIn'), ToastConfigs.errorToastConfig)
+          return
+        })
+      }
+      return error;
+    })
+  }
 
   async login(email: string, password: string): Promise<boolean | null> {
     let success = false
@@ -18,16 +31,18 @@ class UserService {
       email: email,
       password: password
     }).then(response => {
-      if (response.data) {
+      console.log(response)
+      if (response.status === 200 && response.data) {
         window.localStorage.setItem('userData', JSON.stringify(response.data as User))
         success = true;
       }
+      if (response.status === 400) {
+        toast('Hibás adatok', ToastConfigs.errorToastConfig);
+      }
+    }, error => {
+      toast(error.toString(), ToastConfigs.errorToastConfig);
     }).catch((err) => {
-        if (err instanceof AxiosError && err.response) {
-          if (err.response.status === 400) {
-            toast('Hibás adatok', ToastConfigs.errorToastConfig);
-          }
-        }
+        console.log(err)
       }
     )
     return success
@@ -67,7 +82,7 @@ class UserService {
         return users;
       }
     } catch (err) {
-      return console.log(err);
+      console.log(err);
     }
   }
 

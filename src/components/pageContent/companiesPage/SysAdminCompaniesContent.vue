@@ -12,7 +12,7 @@
     >
       <div class="max-md:max-w-full text-left">Cégek</div>
       <div>
-        <DataTable :table-data="companyData" header-class="companiesTable"/>
+        <DataTable :table-data="companyData" header-class="companiesTable" button-img-file-name="details_eye.png"/>
       </div>
     </div>
   </div>

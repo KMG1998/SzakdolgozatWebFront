@@ -6,6 +6,8 @@ const i18n = createI18n({
   globalInjection: true,
   messages: {
     hu: {
+      true:'Igen',
+      false:'Nem',
       mainPage: {
         quickActions: 'gyorsműveletek'
       },
@@ -47,11 +49,18 @@ const i18n = createI18n({
         saveFail:'Sikertelen mentés',
         deleteSuccess:'Sikeres törlés',
         deleteFail:'Sikertelen törlés',
+        linkSuccess:'Sikeres összekötés',
+        linkFail:'Sikertelen összekötés',
+        unlinkSuccess:'Sikeres leválasztás',
+        unlinkFail:'Sikertelen leválasztás',
+        pleaseLogIn:'Kérjük,jelentkezzen be'
       },
       inputValidation:{
         requiredField:'Kötelező mező',
         formatError:'Hibás formátum',
-        minLength:'Legalább {length} karakter hosszúnak kell lennie'
+        minLength:'Legalább {length} karakter hosszúnak kell lennie',
+        minValue:'A minimum érték {minValue}',
+        phoneFormat:'A megfelelő formátum: +xx xx xxx xxxx'
       }
     },
   }

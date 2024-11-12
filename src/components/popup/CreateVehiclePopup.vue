@@ -1,25 +1,26 @@
 <template>
-  <div class="fixed top-[15%] left-[25%] flex flex-col items-center py-4 bg-white rounded-3xl z-100">
+  <div class="fixed flex flex-col items-center py-4 bg-white rounded-3xl opacity-100 z-50">
     <form @submit.prevent>
       <div class="w-full min-w-[500px] max-w-[1100px] max-md:max-w-full px-[10px]">
         <div class="flex gap-5 max-md:flex-col max-md:gap-0 max-md:items-stretch text-center">
           <div
-              class="flex flex-col items-stretch w-[100%] min-w-[450px] max-md:ml-0 max-md:w-full"
+            class="flex flex-col items-stretch w-[100%] min-w-[450px] max-md:ml-0 max-md:w-full"
           >
             <div class="flex flex-col grow items-stretch max-md:mt-10">
               <div class="text-xl text-black">új jármű adatai</div>
               <div class="flex flex-col items-center mt-9 max-md:pl-5">
                 <label
-                    for="seats"
-                    class=" text-xl text-center text-black whitespace-nowrap"
-                >
+                  for="seats"
+                  class=" text-xl text-center text-black whitespace-nowrap">
                   ülések száma
                 </label>
                 <input id="seats"
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 px-3 rounded-3xl border-2 border-solid border-black text-center"
                        type="number"
                        placeholder="ülések száma"
-                       v-model="seats">
+                       v-model="seats"
+                       v-bind="seatsProps">
+                <FieldError :error="errors.seats" v-if="errors.seats && meta.touched"/>
                 <label for="plateNum" class="mt-6 text-xl text-center text-black">
                   rendszám
                 </label>
@@ -27,7 +28,9 @@
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                        type="text"
                        placeholder="rendszám"
-                       v-model="plateNum">
+                       v-model="plateNum"
+                       v-bind="plateNumProps">
+                <FieldError :error="errors.plateNum" v-if="errors.plateNum && meta.touched"/>
                 <label for="carType" class="mt-6 text-xl text-center text-black">
                   típus
                 </label>
@@ -35,36 +38,26 @@
                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
                        type="text"
                        placeholder="jármű típus"
-                       v-model="carType">
+                       v-model="carType"
+                       v-bind="carTypeProps">
+                <FieldError :error="errors.carType" v-if="errors.carType && meta.touched"/>
                 <label for="airCond" class="mt-6 text-xl text-center text-black">
-                  légkondi
+                  szín
                 </label>
-                <div
-                    id="airCond"
-                    class="flex gap-10 justify-center items-stretch mt-5 max-w-full"
-                >
-                  <div>
-                    <label for="airCondYes" class="mt-6 text-xl text-center text-black">
-                      Igen
-                    </label>
-                    <input id="airCondYes" type="radio" :value=1 name="airCond" class="h-[15px] w-[15px]"
-                           v-model="airCond">
-                  </div>
-                  <div>
-                    <label for="airCondNo" class="mt-6 text-xl text-center text-black">
-                      Nem
-                    </label>
-                    <input id="airCondNo" type="radio" :value=0 name="airCond" class="h-[15px] w-[15px]"
-                           v-model="airCond">
-                  </div>
-                </div>
+                <input id="carColor"
+                       class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
+                       type="text"
+                       placeholder="jármű színe"
+                       v-model="color"
+                       v-bind="colorProps">
+                <FieldError :error="errors.color" v-if="errors.color && meta.touched"/>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div
-          class="self-stretch mt-9 w-full bg-black min-h-[2px] max-md:max-w-full"
+        class="self-stretch mt-9 w-full bg-black min-h-[2px] max-md:max-w-full"
       ></div>
       <button type="button"
               @click="createVehicle"
@@ -74,42 +67,57 @@
       </button>
       <div v-else class="flex items-center justify-center pt-2">
         <semipolar-spinner
-            :animation-duration="2000"
-            :size="40"
-            color="#57A3EF"
+          :animation-duration="2000"
+          :size="40"
+          color="#57A3EF"
         />
       </div>
     </form>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import {toTypedSchema} from "@vee-validate/yup";
+import {object} from "yup";
+import Validators from "@/utils/valdiators";
+import {useI18n} from "vue-i18n";
+import {useForm} from "vee-validate";
+import {ref} from "vue";
+import {SemipolarSpinner} from "epic-spinners";
+import FieldError from "@/components/commons/FieldError.vue";
 import VehicleService from "@/services/vehicleService";
+import ToastConfigs from "@/utils/toastConfigs";
+import {toast} from "vue3-toastify";
 
-export default {
-  name: "CreateVehiclePopup",
-  methods: {
-    async createVehicle() {
-      const newVehicle = await VehicleService.createVehicle(this.seats, this.plateNum, this.carType, this.airCond);
-      console.log(newVehicle)
-      if (newVehicle !== undefined) {
-        this.createInProgress = false
-        alert("Sikeres létrehozás")
-      }
+const {t} = useI18n()
+const validators = new Validators(t)
+
+const schema = toTypedSchema(object({
+  seats: validators.minAmount(2),
+  plateNum: validators.minLength(6),
+  carType: validators.minLength(3),
+  color: validators.minLength(3),
+}));
+
+const {errors, meta, defineField} = useForm({validationSchema: schema})
+const [seats, seatsProps] = defineField('seats')
+const [plateNum, plateNumProps] = defineField('plateNum')
+const [carType, carTypeProps] = defineField('carType')
+const [color, colorProps] = defineField('color')
+const createInProgress = ref<boolean>(false)
+
+async function createVehicle() {
+  if (meta.value.valid) {
+    createInProgress.value = true
+    const newVehicle = await VehicleService.createVehicle(seats.value, plateNum.value, carType.value, color.value);
+    createInProgress.value = false
+    if (newVehicle !== undefined) {
+      toast("Sikeres létrehozás", ToastConfigs.successToastConfig)
+      return
     }
-  },
-  data: function () {
-    return {
-      createInProgress: false,
-      seats: undefined,
-      plateNum: undefined,
-      carType: undefined,
-      airCond: undefined,
-    }
+    toast("Sikertelen létrehozás", ToastConfigs.errorToastConfig)
   }
 }
+
+
 </script>
-
-<style scoped>
-
-</style>

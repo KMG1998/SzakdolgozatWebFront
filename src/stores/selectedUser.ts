@@ -11,6 +11,7 @@ export const useSelectedUserStore = defineStore('selectedUser', {
       saveInProgress: false,
       editStarted: false,
       deleteStarted: false,
+      unlinkStarted: false,
       popUpToggleFunction:Function
   }),
 })

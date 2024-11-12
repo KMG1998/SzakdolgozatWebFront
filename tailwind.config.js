@@ -7,6 +7,7 @@ export default {
       colors:{
         'taxi-blue': '#57A3EF',
         'taxi-to-color':'#CAE2FA',
+        'warning-red':'#f0291a'
       }
     },
   },

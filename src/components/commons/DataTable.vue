@@ -1,12 +1,3 @@
-<script setup lang="ts">
-import {SemipolarSpinner} from "epic-spinners";
-
-defineProps({
-  tableData: Array,
-  headerClass: String,
-  onDetailsClick: Function,
-})
-</script>
 <template>
   <table v-if="tableData !== undefined && tableData.length > 0" class="border-2 border-collapse border-black w-full">
     <thead>
@@ -27,11 +18,11 @@ defineProps({
       :key="`entity-${entity.id}`"
       class="border-2 border-black"
     >
-      <td v-for="(data, i) in entity" :key="`${data}-${i}`" class="border-2 border-black">
-        {{ data }}
+      <td v-for="(data, i) in entity" :key="`${data}-${i}`" class="border-2 border-black px-2">
+        {{ typeof data === "boolean" ? $t(data.toString()) : data }}
       </td>
       <td class="min-w-[40px]">
-        <img src="../../assets/images/details_eye.png" @click="onDetailsClick(entity)" class="m-auto cursor-pointer">
+        <img :src="getImageUrl()" @click="onDetailsClick(entity)" class="m-auto cursor-pointer p-2">
       </td>
     </tr>
     </tbody>
@@ -44,3 +35,18 @@ defineProps({
     />
   </div>
 </template>
+<script setup lang="ts">
+import {SemipolarSpinner} from "epic-spinners";
+import {onBeforeMount} from "vue";
+
+const props = defineProps({
+  tableData: Array,
+  headerClass: String,
+  onDetailsClick: Function,
+  buttonImgFileName:String,
+})
+
+function getImageUrl(){
+  return new URL(`../../assets/images/${props.buttonImgFileName}`, import.meta.url)
+}
+</script>

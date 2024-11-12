@@ -15,7 +15,7 @@
                    @click="userDataStore.editStarted = true">
             </div>
             <div
-              class="w-[40px] h-[40px] absolute left-4 z-10 bg-white border-solid rounded-full border-black border-2 p-[5px] bg-red-500 cursor-pointer"
+              class="w-[40px] h-[40px] absolute left-4 z-10 bg-white border-solid rounded-full border-black border-2 p-[5px] cursor-pointer"
               v-if="!userDataStore.editStarted && !userDataStore.deleteStarted">
               <img src="@/assets/images/delete_button.png"
                    @click="userDataStore.deleteStarted = true">
@@ -26,7 +26,7 @@
               ID
             </label>
             <label class="mt-3 text-center">
-              {{userDataStore.selectedUser.id}}
+              {{ userDataStore.selectedUser.id }}
             </label>
           </div>
           <div class="flex flex-col items-stretch mt-3 max-md:pl-5">
@@ -92,7 +92,7 @@
     <div class="flex flex-row w-full justify-around gap-2">
       <button type="button"
               @click="deleteUser"
-              class="justify-center items-center px-16 py-2 mt-3 max-w-full text-xl text-black bg-red-400 rounded-3xl border-2 border-black border-solid"
+              class="justify-center items-center px-16 py-2 mt-3 max-w-full text-xl text-black bg-warning-red rounded-3xl border-2 border-black border-solid"
       >Törlés
       </button>
       <button type="button"

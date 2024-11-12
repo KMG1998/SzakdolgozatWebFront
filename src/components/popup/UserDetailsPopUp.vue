@@ -51,9 +51,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import UserDetailsUserPage from "@/components/popup/userDataPopUp/pages/UserDetailsUserPage.vue";
-import UserDetailsVehiclePage from "@/components/popup/userDataPopUp/pages/UserDetailsVehiclePage.vue";
-import UserDetailsCompanyPage from "@/components/popup/userDataPopUp/pages/UserDetailsCompanyPage.vue";
+import UserDetailsUserPage from "@/components/popup/pages/UserDetailsPage.vue";
+import UserDetailsVehiclePage from "@/components/popup/pages/VehicleDetailsPage.vue";
+import UserDetailsCompanyPage from "@/components/popup/pages/CompanyDetailsPage.vue";
 import {useSelectedUserStore} from "@/stores/selectedUser";
 import VehicleService from "@/services/vehicleService";
 import CompanyService from "@/services/companyService";
@@ -75,10 +75,10 @@ onBeforeMount(() => {
 
 async function getAdditionalData() {
   if (selectedUserStore.selectedUser.typeId === 3) {
-    selectedUserStore.userVehicle = await VehicleService.getVehicleByDriver(selectedUserStore.selectedUser.id)
+    selectedUserStore.userVehicle = await VehicleService.findVehicleByDriver(selectedUserStore.selectedUser.id)
   }
   if (selectedUserStore.selectedUser.typeId === 4) {
-    selectedUserStore.userVehicle = await VehicleService.getVehicleByDriver(selectedUserStore.selectedUser.id)
+    selectedUserStore.userVehicle = await VehicleService.findVehicleByDriver(selectedUserStore.selectedUser.id)
     selectedUserStore.userCompany = await CompanyService.getCompanyByWorker(selectedUserStore.selectedUser.id)
   }
 }

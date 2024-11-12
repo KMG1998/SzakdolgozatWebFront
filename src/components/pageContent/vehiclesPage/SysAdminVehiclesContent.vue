@@ -14,7 +14,7 @@
     >
       <div class="max-md:max-w-full text-left">Járművek</div>
       <div>
-        <DataTable :table-data="vehicleData" header-class="vehicleTable" />
+        <DataTable :table-data="vehicleData" header-class="vehicleTable" button-img-file-name="details_eye.png"/>
       </div>
     </div>
   </div>

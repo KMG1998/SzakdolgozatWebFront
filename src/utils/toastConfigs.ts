@@ -17,7 +17,7 @@ const errorToastConfig = {
   transition: "slide",
   hideProgressBar: true,
   icon: false,
-  toastStyle: {"background-color": "#ed4e42", "color": "#ffffff"}
+  toastStyle: {"background-color": "#f0291a", "color": "#ffffff"}
 }
 
 
