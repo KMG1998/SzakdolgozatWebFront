@@ -16,6 +16,7 @@
   "dependencies": {
     "@vee-validate/yup": "^4.14.7",
     "axios": "^1.6.7",
+    "date-fns": "^4.1.0",
     "epic-spinners": "^2.0.0",
     "pinia": "^2.2.4",
     "vee-validate": "^4.14.6",

@@ -1,6 +1,3 @@
-<script setup>
-import router from "@/router";
-</script>
 <template>
   <div class="relative z-0 h-[100vh] gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0 mr-7">
     <div
@@ -18,9 +15,6 @@ import router from "@/router";
       <div class="mt-11 max-md:mt-10 cursor-pointer" @click="router.push('/vehicles')">
         {{ $t("sideMenu.vehiclesPage") }}
       </div>
-      <div class="mt-11 max-md:mt-10 cursor-pointer" @click="router.push('/reserves')">
-        {{ $t("sideMenu.reservationsPage") }}
-      </div>
       <div class="mt-10 max-md:mt-10 cursor-pointer" @click="router.push('/companies')">
         {{ $t("sideMenu.companiesPage") }}
       </div>
@@ -35,28 +29,23 @@ import router from "@/router";
   </div>
 </template>
 
-<script>
-import {defineComponent} from 'vue'
+<script setup>
 import UserService from "@/services/userService.ts";
 import {toast} from "vue3-toastify";
 import ToastConfigs from "@/utils/toastConfigs.ts";
+import {ref} from 'vue'
+import router from "@/router"
 
-export default defineComponent({
-  name: 'SysAdminMenu',
-  data() {
-    return {
-      userName: JSON.parse(window.localStorage.getItem('userData')).name
-    }
-  },
-  methods: {
-    async logOut() {
-      if(await UserService.logOut()){
-        window.localStorage.clear()
-        await router.push('/login')
-        return
-      }
-      toast('Sikertelen kijelentkezés',ToastConfigs.errorToastConfig)
-    },
+
+const userName = ref(JSON.parse(window.localStorage.getItem('userData')).name)
+
+async function logOut() {
+  if (await UserService.logOut()) {
+    window.localStorage.clear()
+    await router.push('/login')
+    return
   }
-});
+  toast('Sikertelen kijelentkezés', ToastConfigs.errorToastConfig)
+}
+;
 </script>

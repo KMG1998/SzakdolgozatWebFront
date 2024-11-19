@@ -17,23 +17,30 @@ class VehicleService {
       console.log('inErrorHandler')
       if (error.status === 401) {
         router.push({name: 'login'}).then(r => {
-          toast(t('toastMessages.pleaseLogIn'),ToastConfigs.errorToastConfig)
+          toast(t('toastMessages.pleaseLogIn'), ToastConfigs.errorToastConfig)
           return
         })
       }
       return error;
     })
   }
+
   createVehicle(seats: number,
                 plateNum: string,
                 carType: string,
-                color: string): Promise<Vehicle | void> {
+                color: string,
+                insuranceNum: string,
+                insuranceIssuer: string,
+                insuranceValidUntil: Date,): Promise<Vehicle | void> {
     return axiosClient
       .post(API_URL + 'create', {
         seats: seats,
         plateNumber: plateNum,
         type: carType,
-        color: color
+        color: color,
+        insuranceValidUntil:insuranceValidUntil,
+        insuranceIssuer:insuranceIssuer,
+        insuranceNumber:insuranceNum
       })
       .then(response => {
         if (response.data) {

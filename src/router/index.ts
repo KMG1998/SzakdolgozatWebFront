@@ -1,12 +1,12 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
-import ReservesView from '../views/ReservesView.vue'
 import UsersView from '../views/UsersView.vue'
 import VehiclesView from '../views/VehiclesView.vue'
 import CompaniesView from '../views/CompaniesView.vue'
-import { useCookies } from "vue3-cookies";
-const { cookies } = useCookies();
+import {useCookies} from "vue3-cookies";
+
+const {cookies} = useCookies();
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,11 +21,6 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
-    },
-    {
-      path: '/reserves',
-      name: 'reserves',
-      component: ReservesView,
     },
     {
       path: '/users',
@@ -46,10 +41,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, _) => {
-  if(cookies.get('authenticated')  !== 'true' && to.name !== 'login')
-    return {name:'login'}
-  if(cookies.get('authenticated')  === 'true' && to.name === 'login')
-    return {name:'home'}
+  if (cookies.get('authenticated') !== 'true' && to.name !== 'login')
+    return {name: 'login'}
+  if (cookies.get('authenticated') === 'true' && to.name === 'login')
+    return {name: 'home'}
 })
 
 export default router
