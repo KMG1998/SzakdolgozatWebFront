@@ -5,6 +5,7 @@ type Vehicle = undefined | {
     type: string,
     available: boolean,
     plateNumber: string,
+    insuranceId?: string
 }
 
 export default Vehicle

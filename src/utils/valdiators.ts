@@ -20,7 +20,7 @@ class Validators {
   public minAmount = (minAmount: number) => number().required(this.translate('inputValidation.requiredField'))
     .min(minAmount, this.translate('inputValidation.minValue', {minValue: minAmount}))
 
-  public required = () => string().required()
+  public required = () => string().required
 
   public minLength = (minLength: number) => string().required(this.translate('inputValidation.requiredField'))
     .min(minLength,this.translate('inputValidation.minLength', {length: minLength}))
