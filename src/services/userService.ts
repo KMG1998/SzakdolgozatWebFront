@@ -2,24 +2,20 @@ import axios, {AxiosError} from "axios";
 import * as User from "../types/User";
 import {toast} from 'vue3-toastify';
 import ToastConfigs from "@/utils/toastConfigs";
-import router from "@/router";
-import i18n from "@/utils/lang";
-
+import {useCookies} from "vue3-cookies";
 
 const API_URL = 'http://localhost:8085/user/';
 const axiosClient = axios.create({withCredentials: true})
+const { cookies } = useCookies();
 
 class UserService {
   constructor() {
-    const {t} = i18n.global
     axiosClient.interceptors.response.use(response => {
       return response;
     }, (error) => {
       if (error.status === 401) {
-        router.push({name: 'login'}).then(r => {
-          toast(t('toastMessages.pleaseLogIn'), ToastConfigs.errorToastConfig)
-          return
-        })
+        cookies.remove('authenticated')
+        cookies.remove('token')
       }
       return error;
     })
@@ -33,7 +29,7 @@ class UserService {
     }).then(response => {
       console.log(response)
       if (response.status === 200 && response.data) {
-        window.localStorage.setItem('userData', JSON.stringify(response.data as User))
+        sessionStorage.setItem('userData', JSON.stringify(response.data as User))
         success = true;
       }
       if (response.status === 400) {
@@ -48,11 +44,10 @@ class UserService {
     return success
   }
 
-  async createUser(email: string, password: string, name: string, userType: number): Promise<string | undefined> {
+  async createUser(email: string, name: string, userType: number): Promise<string | undefined> {
     let newUserId = undefined
     await axiosClient.post(API_URL + 'create', {
       email: email,
-      password: password,
       name: name,
       type: userType
     })
@@ -127,14 +122,33 @@ class UserService {
   }
 
   async logOut(): Promise<boolean> {
-    let success = false
-    await axiosClient.post(API_URL + 'logOut').then((resp) => {
+    try {
+      const resp = await axiosClient.post(API_URL + 'logOut')
       if (resp.status === 200) {
-        success = true
+        sessionStorage.clear()
+        return true
       }
-    }).catch(err => {
-    })
-    return success
+      return false
+    } catch (e) {
+      return false
+    }
+  }
+
+  async getOwnData():Promise<void>{
+    const resp = await axiosClient.get(API_URL + 'getOwnData')
+    sessionStorage.setItem('userData', JSON.stringify(resp.data as User))
+  }
+
+  async checkToken() {
+    try {
+      const resp = await axiosClient.post(API_URL + 'checkToken')
+      if(resp.status === 200 && sessionStorage.getItem('userData') == null){
+        await this.getOwnData();
+      }
+      return resp.status === 200
+    } catch (e) {
+      return false
+    }
   }
 }
 

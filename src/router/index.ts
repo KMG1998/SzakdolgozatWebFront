@@ -1,11 +1,12 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
-import ReservesView from '../views/ReservesView.vue'
+import ReservesView from '../views/OrdersView.vue'
 import UsersView from '../views/UsersView.vue'
 import VehiclesView from '../views/VehiclesView.vue'
 import CompaniesView from '../views/CompaniesView.vue'
 import { useCookies } from "vue3-cookies";
+import userService from "@/services/userService";
 const { cookies } = useCookies();
 
 const router = createRouter({
@@ -15,7 +16,7 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       alias: '/',
-      component: HomeView
+      component: HomeView,
     },
     {
       path: '/login',
@@ -45,7 +46,11 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, _) => {
+router.beforeResolve(async (to, _) => {
+  if(cookies.get('authenticated')  !== 'true' && to.name === 'login'){
+    return true
+  }
+  await userService.checkToken()
   if(cookies.get('authenticated')  !== 'true' && to.name !== 'login')
     return {name:'login'}
   if(cookies.get('authenticated')  === 'true' && to.name === 'login')

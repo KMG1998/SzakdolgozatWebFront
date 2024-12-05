@@ -6,15 +6,9 @@
   </div>
 </template>
 
-<script>
-import {defineComponent} from 'vue';
+<script setup lang="ts">
 import SysAdminMenu from "@/components/commons/menu/SysAdminMenu.vue";
 import SysAdminUsersContent from "@/components/pageContent/usersPage/SysAdminUserContent.vue";
-
-export default defineComponent({
-  name: "UsersView",
-  components: {SysAdminUsersContent, SysAdminMenu}
-})
 </script>
 
 <style scoped>

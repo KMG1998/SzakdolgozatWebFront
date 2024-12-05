@@ -1,11 +1,11 @@
 <template>
-  <PopUp :visiblity-variable="isUserPopupVisible" @toggle="toggleUserPopUp">
+  <PopUp :visibility-variable="isUserPopupVisible" @toggle="toggleUserPopUp">
     <CreateUserPopUp :toggle-function="toggleUserPopUp"/>
   </PopUp>
-  <PopUp :visiblity-variable="isCompanyPopupVisible" @toggle="toggleCompanyPopUp">
+  <PopUp :visibility-variable="isCompanyPopupVisible" @toggle="toggleCompanyPopUp">
     <CreateCompanyPopUp/>
   </PopUp>
-  <PopUp :visiblity-variable="isVehiclePopupVisible" @toggle="toggleVehiclePopUp">
+  <PopUp :visibility-variable="isVehiclePopupVisible" @toggle="toggleVehiclePopUp">
     <CreateVehiclePopup/>
   </PopUp>
   <div class="flex flex-row">
@@ -139,8 +139,8 @@ export default {
       isUserPopupVisible: false,
       isCompanyPopupVisible: false,
       isVehiclePopupVisible: false,
-      userName: JSON.parse(window.localStorage.getItem('userData')).name,
-      userEmail: JSON.parse(window.localStorage.getItem('userData')).email
+      userName: JSON.parse(sessionStorage.getItem('userData')).name,
+      userEmail: JSON.parse(sessionStorage.getItem('userData')).email
     }
   },
 }

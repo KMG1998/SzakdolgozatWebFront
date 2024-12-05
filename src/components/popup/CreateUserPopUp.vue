@@ -9,48 +9,33 @@
             <div class="flex flex-col grow items-stretch max-md:mt-10">
               <p class="text-xl text-black">új felhasználó adatai</p>
               <div class="flex flex-col items-stretch mt-9 max-md:pl-5">
-                <label
-                  for="email"
-                  class="self-center text-xl text-center text-black whitespace-nowrap"
-                >
-                  felhasználó e-mail
-                </label>
-                <input name="email" type="email" v-model="email"
-                       class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
-                       placeholder="E-mail">
-
-                <label for="name" class="self-center mt-6 text-xl text-center text-black whitespace-nowrap">
-                  felhasználó neve
-                </label>
-                <input id="name"
-                       class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
-                       type="text"
-                       placeholder="név"
-                       v-model="nameOfUser">
-                <label
-                  class="self-center mt-6 text-xl text-center text-black whitespace-nowrap"
-                >
-                  első jelszó
-                </label>
-                <input id="passw"
-                       class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full flex-col mt-3 rounded-3xl border-2 border-solid border-black text-center"
-                       type="password"
-                       placeholder="jelszó"
-                       v-model="passw">
-                <label for="userType" class="self-center mt-6 text-xl text-center text-black">
-                  típus
-                </label>
-                <select id="userType"
-                        class="shadow-sm bg-white self-stretch flex shrink-0 h-12  w-full rounded-3xl border-2 border-solid border-black text-center"
-                        v-model="userType"
-                        required>
-                  <option disabled value=0>Kérjük válasszon típust</option>
-                  <option value=1>Rendszer adminisztrátor</option>
-                  <option value=2>Céges adminisztrátor</option>
-                  <option value=3>Magán sofőr</option>
-                  <option value=4>Céges sofőr</option>
-                  <option value=5>Utas</option>
-                </select>
+                <InputField
+                  field-id="email"
+                  label="felhasználó e-mail"
+                  type="text"
+                  v-model=email
+                  v-bind=emailProps
+                  :meta="meta"
+                  :error="errors.email"
+                />
+                <InputField
+                  field-id="name"
+                  label="felhasználó neve"
+                  type="text"
+                  v-model=nameOfUser
+                  v-bind=nameOfUserProps
+                  :meta="meta"
+                  :error="errors.nameOfUser"
+                />
+                <Selector
+                  field-id="userType"
+                  label="típus"
+                  v-model=userType
+                  v-bind=userTypeProps
+                  :meta="meta"
+                  :error="errors.userType"
+                  :elements=selectorElements
+                />
               </div>
             </div>
           </div>
@@ -83,30 +68,46 @@ import {SemipolarSpinner} from "epic-spinners";
 import {toast, ToastOptions} from "vue3-toastify";
 import {useI18n} from "vue-i18n";
 import ToastConfigs from "@/utils/toastConfigs";
-import {Field, Form} from "vee-validate"
+import {Form, useForm} from "vee-validate"
+import {toTypedSchema} from "@vee-validate/yup";
+import {object} from "yup";
+import Validators from "@/utils/valdiators";
+import InputField from "@/components/commons/inputs/InputField.vue"
+import Selector from "@/components/commons/inputs/ListSelector.vue"
 
 const {t} = useI18n()
 
-const props = defineProps({
-  toggleFunction: Function,
-})
+const schema = toTypedSchema(object({
+  userType: Validators.userTypeValidator(),
+  email: Validators.emailValidator(),
+  nameOfUser: Validators.minLength(3),
+}));
 
-const createInProgress = ref(false)
-const userType = ref(0)
-const passw = ref("")
-const email = ref("")
-const nameOfUser = ref("")
+const {errors, meta, defineField} = useForm({validationSchema: schema})
+const [email, emailProps] = defineField('email')
+const [nameOfUser, nameOfUserProps] = defineField('nameOfUser',)
+const [userType, userTypeProps] = defineField('userType',)
+
+userType.value = 0;
+const selectorElements = [
+  {value:0,label:'Kérjük, válasszon értéket!'},
+  {value:1,label:'Rendszer adminisztrátor'},
+  {value:2,label:'Céges adminisztrátor'},
+  {value:3,label:'Magán sofőr'},
+  {value:4,label:'Céges sofőr'},
+]
+const createInProgress = ref<boolean>(false)
 
 async function createUser() {
   createInProgress.value = true
-  const newUser = await UserService.createUser(email.value, passw.value, nameOfUser.value, userType.value);
+  const newUser = await UserService.createUser(email.value,nameOfUser.value, userType.value);
   console.log(newUser)
   if (newUser) {
-    props.toggleFunction()
     toast(t("toastMessages.createSuccess"), ToastConfigs.successToastConfig as ToastOptions)
     return
   }
   toast(t("toastMessages.createFail"), ToastConfigs.errorToastConfig as ToastOptions)
   createInProgress.value = false
 }
+
 </script>

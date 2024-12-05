@@ -1,5 +1,5 @@
 <template>
-  <PopUp :visiblity-variable="selectedUserStore.popUpVisible" @toggle="selectedUserStore.popUpToggleFunction">
+  <PopUp :visibility-variable="selectedUserStore.popUpVisible" @toggle="selectedUserStore.popUpToggleFunction">
     <UserDetailsPopUp/>
   </PopUp>
   <div
@@ -24,41 +24,32 @@
   </div>
 </template>
 
-<script>
-import {defineComponent} from 'vue';
+<script setup lang="ts">
 import UserService from "@/services/userService";
 import PopUp from "@/components/popup/PopUp.vue";
 import UserDetailsPopUp from "@/components/popup/UserDetailsPopUp.vue";
 import DataTable from "@/components/commons/DataTable.vue";
 import {useSelectedUserStore} from "@/stores/selectedUser.ts";
+import {onBeforeMount, ref} from "vue";
 
-export default defineComponent({
-  name: "SysAdminUsersContent",
-  components: {
-    PopUp, UserDetailsPopUp, DataTable
-  },
-  data() {
-    return {
-      usersData: undefined,
-      selectedUserStore: useSelectedUserStore()
-    }
-  },
-  methods: {
-    getUsers: async function () {
-      this.usersData = await UserService.getAllUsers();
-    },
-    toggleDetailsPopUp: function (selectedUser) {
-      this.selectedUserStore.selectedUser = selectedUser
-      this.selectedUserStore.popUpVisible = !this.selectedUserStore.popUpVisible
-      if (!this.selectedUserStore.popUpVisible) {
-        this.getUsers()
-      }
-    }
+const usersData = ref(undefined)
+const selectedUserStore = useSelectedUserStore()
 
-  },
-  beforeMount() {
-    this.getUsers();
-    this.selectedUserStore.popUpToggleFunction = this.toggleDetailsPopUp
-  },
+
+async function getUsers() {
+  usersData.value = await UserService.getAllUsers();
+}
+
+function toggleDetailsPopUp(selectedUser) {
+  selectedUserStore.selectedUser = selectedUser
+  selectedUserStore.popUpVisible = !selectedUserStore.popUpVisible
+  if (!selectedUserStore.popUpVisible) {
+    getUsers()
+  }
+}
+
+onBeforeMount(() =>{
+  getUsers();
+  selectedUserStore.popUpToggleFunction = toggleDetailsPopUp
 })
 </script>

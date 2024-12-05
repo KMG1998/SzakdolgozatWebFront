@@ -6,14 +6,9 @@
   </div>
 </template>
 
-<script>
-import {defineComponent} from 'vue';
+<script setup lang="ts">
 import SysAdminMenu from "@/components/commons/menu/SysAdminMenu.vue";
 import SysAdminVehiclesContent from "@/components/pageContent/vehiclesPage/SysAdminVehiclesContent.vue";
-export default defineComponent({
-  name: "VehiclesView",
-  components:{SysAdminVehiclesContent, SysAdminMenu}
-})
 </script>
 
 <style scoped>

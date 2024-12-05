@@ -1,10 +1,24 @@
 import axios from "axios";
 import * as Company from "../types/Company";
+import {useCookies} from "vue3-cookies";
 
 const API_URL = 'http://localhost:8085/company/';
 const axiosClient = axios.create({withCredentials: true})
+const { cookies } = useCookies();
 
 class CompanyService {
+  constructor() {
+    axiosClient.interceptors.response.use(response => {
+      return response;
+    }, (error) => {
+      if (error.status === 401) {
+        cookies.remove('authenticated')
+        cookies.remove('token')
+      }
+      return error;
+    })
+  }
+
   async createCompany(name: string,
                       officeAddress: string,
                       officeTel: string,

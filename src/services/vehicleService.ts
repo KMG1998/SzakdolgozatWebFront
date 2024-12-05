@@ -2,38 +2,38 @@ import axios, {AxiosError} from "axios";
 import * as Vehicle from "../types/Vehicle";
 import {toast} from "vue3-toastify";
 import ToastConfigs from "@/utils/toastConfigs";
-import router from "@/router";
-import i18n from "@/utils/lang";
+import {useCookies} from "vue3-cookies";
 
 const API_URL = 'http://localhost:8085/vehicle/';
 const axiosClient = axios.create({withCredentials: true})
+const { cookies } = useCookies();
 
 class VehicleService {
   constructor() {
-    const {t} = i18n.global
     axiosClient.interceptors.response.use(response => {
       return response;
     }, (error) => {
-      console.log('inErrorHandler')
       if (error.status === 401) {
-        router.push({name: 'login'}).then(r => {
-          toast(t('toastMessages.pleaseLogIn'),ToastConfigs.errorToastConfig)
-          return
-        })
+        cookies.remove('authenticated')
+        cookies.remove('token')
       }
       return error;
     })
   }
-  createVehicle(seats: number,
-                plateNum: string,
-                carType: string,
-                color: string): Promise<Vehicle | void> {
+
+  createVehicle(seats: number, plateNum: string, carType: string, color: string,
+                insuranceValidUntil: string, insuranceIssuer: string, insuranceNumber: string, registrationValidUntil: string
+  ): Promise<Vehicle | void> {
     return axiosClient
       .post(API_URL + 'create', {
         seats: seats,
         plateNumber: plateNum,
         type: carType,
-        color: color
+        color: color,
+        insuranceValidUntil: insuranceValidUntil,
+        insuranceIssuer: insuranceIssuer,
+        insuranceNumber: insuranceNumber,
+        registrationValidUntil: registrationValidUntil
       })
       .then(response => {
         if (response.data) {

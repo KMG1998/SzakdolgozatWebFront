@@ -1,6 +1,3 @@
-<script setup>
-import router from "@/router";
-</script>
 <template>
   <div class="relative z-0 h-[100vh] gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0 mr-7">
     <div
@@ -12,51 +9,52 @@ import router from "@/router";
         class="aspect-square object-contain object-center w-[200px] cursor-pointer"
       >
       <div class="text-center mt-10">{{ userName }}</div>
-      <div class="mt-11 max-md:mt-10 cursor-pointer" @click="router.push('/users')">
+      <a :class="getNavClass('/users')" @click="router.push('/users')">
         {{ $t("sideMenu.usersPage") }}
-      </div>
-      <div class="mt-11 max-md:mt-10 cursor-pointer" @click="router.push('/vehicles')">
+      </a>
+      <p :class="getNavClass('/vehicles')" @click="router.push('/vehicles')">
         {{ $t("sideMenu.vehiclesPage") }}
-      </div>
-      <div class="mt-11 max-md:mt-10 cursor-pointer" @click="router.push('/reserves')">
+      </p>
+      <p :class="getNavClass('/reserves')" @click="router.push('/reserves')">
         {{ $t("sideMenu.reservationsPage") }}
-      </div>
-      <div class="mt-10 max-md:mt-10 cursor-pointer" @click="router.push('/companies')">
+      </p>
+      <p :class="getNavClass('/companies')" @click="router.push('/companies')">
         {{ $t("sideMenu.companiesPage") }}
-      </div>
+      </p>
       <div class="h-full"/>
       <img
         class="object-contain object-center w-[92px] fill-black cursor-pointer"
         loading="lazy"
-        src="../../../assets/images/log_out.png"
+        src="@/assets/images/log_out.png"
         @click="logOut"
       >
     </div>
   </div>
 </template>
 
-<script>
-import {defineComponent} from 'vue'
+<script setup lang="ts">
 import UserService from "@/services/userService.ts";
 import {toast} from "vue3-toastify";
 import ToastConfigs from "@/utils/toastConfigs.ts";
+import router from "@/router/index.js";
 
-export default defineComponent({
-  name: 'SysAdminMenu',
-  data() {
-    return {
-      userName: JSON.parse(window.localStorage.getItem('userData')).name
-    }
-  },
-  methods: {
-    async logOut() {
-      if(await UserService.logOut()){
-        window.localStorage.clear()
-        await router.push('/login')
-        return
-      }
-      toast('Sikertelen kijelentkezés',ToastConfigs.errorToastConfig)
-    },
+const userName = JSON.parse(sessionStorage.getItem('userData')).name
+
+
+async function logOut() {
+  if (await UserService.logOut()) {
+    sessionStorage.clear()
+    await router.push('/login')
+    return
   }
-});
+  toast('Sikertelen kijelentkezés', ToastConfigs.errorToastConfig)
+}
+
+function getNavClass(navPath: string): string {
+  if (router.currentRoute.value.path == navPath) {
+    return 'mt-11 max-md:mt-10 bg-taxi-blue py-2 px-4 text-white rounded-full'
+  }
+  return 'mt-11 max-md:mt-10 py-2 px-4 cursor-pointer'
+}
+
 </script>
