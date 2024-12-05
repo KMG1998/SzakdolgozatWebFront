@@ -1,4 +1,7 @@
 <template>
+  <PopUp :visibility-variable="selectedOrderStore.popUpVisible" @toggle="selectedOrderStore.popUpToggleFunction">
+    <OrderDetailsPopUp/>
+  </PopUp>
   <div
       class="flex flex-col grow shrink-0 mt-6 whitespace-nowrap basis-0 w-fit max-md:max-w-full"
   >
@@ -14,7 +17,7 @@
     >
       <div class="max-md:max-w-full text-left">Foglalások</div>
       <div>
-        <DataTable :table-data="companyData" header-class="userTable" :on-details-click="toggleDetailsPopUp"
+        <DataTable :table-data="companyData" header-class="orderTable" :field-list="['id','startDateTime','startAddress','finishDateTime','destinationAddress']" :on-details-click="toggleDetailsPopUp"
                    button-img-file-name="details_eye.png"/>
       </div>
     </div>
@@ -25,18 +28,27 @@
 import OrderService from "@/services/orderService";
 import DataTable from "@/components/commons/DataTable.vue";
 import {onBeforeMount, ref} from "vue";
+import {useSelectedOrderStore} from "@/stores/selectedOrder.ts";
+import PopUp from "@/components/popup/PopUp.vue";
+import OrderDetailsPopUp from "@/components/popup/orderDetailsPopUp/OrderDetailsPopUp.vue";
 
 const companyData = ref(undefined)
+const selectedOrderStore = useSelectedOrderStore()
 
-onBeforeMount(async () => {
+async function getVehicles() {
   companyData.value = await OrderService.getAllOrders()
+}
+
+onBeforeMount(() => {
+  getVehicles()
+  selectedOrderStore.popUpToggleFunction = toggleDetailsPopUp
 })
 
-function toggleDetailsPopUp(selectedUser) {
-  selectedUserStore.selectedUser = selectedUser
-  selectedUserStore.popUpVisible = !selectedUserStore.popUpVisible
-  if (!selectedUserStore.popUpVisible) {
-    getUsers()
+function toggleDetailsPopUp(selectedOrder) {
+  selectedOrderStore.selectedOrder = selectedOrder
+  selectedOrderStore.popUpVisible = !selectedOrderStore.popUpVisible
+  if (!selectedOrderStore.popUpVisible) {
+    getVehicles()
   }
 }
 </script>

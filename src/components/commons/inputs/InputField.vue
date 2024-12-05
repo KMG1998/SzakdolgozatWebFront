@@ -8,6 +8,7 @@
       :id=props.fieldId
       :type=props.type
       :placeholder=props.label
+      :readonly="props.readonly"
       v-bind="$attrs"
       :value="props.modelValue"
       @input="$emit('update:modelValue',$event.target.value)"
@@ -31,6 +32,7 @@ const props = defineProps<{
   modelValue: string | number | undefined
   error: string | undefined
   meta: object
+  readonly: boolean
 }>()
 
 defineEmits(['update:modelValue']);

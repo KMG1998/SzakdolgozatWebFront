@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import UserService from "@/services/userService";
 import PopUp from "@/components/popup/PopUp.vue";
-import UserDetailsPopUp from "@/components/popup/UserDetailsPopUp.vue";
+import UserDetailsPopUp from "@/components/popup/userDetailsPopUp/UserDetailsPopUp.vue";
 import DataTable from "@/components/commons/DataTable.vue";
 import {useSelectedUserStore} from "@/stores/selectedUser.ts";
 import {onBeforeMount, ref} from "vue";

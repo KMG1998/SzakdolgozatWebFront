@@ -2,18 +2,17 @@ import {defineStore} from 'pinia'
 import * as User from "@/types/User";
 import * as Vehicle from "@/types/Vehicle";
 import * as Company from "@/types/Company";
-import {ref} from "vue";
 
-export const useSelectedUserStore = defineStore('selectedUser', {
+export const  useSelectedCompanyStore = defineStore('selectedCompany', {
   state: () => ({
-    selectedUser: undefined as User,
-    userVehicle: undefined as Vehicle,
-    userCompany: undefined as Company,
+    selectedCompany: undefined as Company,
+    companyWorkers: undefined as Array<User>,
+    companyVehicles: undefined as Array<Vehicle>,
     saveInProgress: false,
-    editStarted: ref(false),
+    editStarted: false,
     deleteStarted: false,
     unlinkStarted: false,
     popUpVisible: false,
-    popUpToggleFunction: Function
+    popUpToggleFunction:Function
   }),
 })

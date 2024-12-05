@@ -4,10 +4,14 @@
     <slot></slot>
   </div>
 </template>
-
 <script setup lang="ts">
 const props = defineProps<{
   visibilityVariable: boolean
 }>()
 defineEmits(['toggle']);
+</script>
+<script lang="ts">
+export default {
+  name: 'PopUp',
+}
 </script>

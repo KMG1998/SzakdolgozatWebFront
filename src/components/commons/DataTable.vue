@@ -3,7 +3,7 @@
     <thead>
     <tr>
       <th
-        v-for="(header, i) in Object.keys(tableData[0])"
+        v-for="(header, i) in (fieldList == undefined ? Object.keys(tableData[0]) : fieldList)"
         :key="`${header}${i}`"
         class="border-2 border-black"
       >
@@ -18,8 +18,11 @@
       :key="`entity-${entity.id}`"
       class="border-2 border-black"
     >
-      <td v-for="(data, i) in entity" :key="`${data}-${i}`" class="border-2 border-black px-2">
-        {{ typeof data === "boolean" ? $t(data.toString()) : data }}
+      <td v-if="fieldList == undefined" v-for="(data, i) in entity" :key="`${data}-${i}`" class="border-2 border-black px-2">
+        {{ printData(data)}}
+      </td>
+      <td v-else v-for="(field, i) in fieldList" :key="`${field}-${i}`" class="border-2 border-black px-2">
+        {{ printData(entity[field])}}
       </td>
       <td class="min-w-[40px]">
         <img :src="getImageUrl()" @click="onDetailsClick(entity)" class="m-auto cursor-pointer p-2">
@@ -37,16 +40,28 @@
 </template>
 <script setup lang="ts">
 import {SemipolarSpinner} from "epic-spinners";
-import {onBeforeMount} from "vue";
+import {useI18n} from "vue-i18n";
+
+const {t} = useI18n()
 
 const props = defineProps({
   tableData: Array,
   headerClass: String,
   onDetailsClick: Function,
-  buttonImgFileName:String,
+  buttonImgFileName: String,
+  fieldList: Array<String>
 })
 
-function getImageUrl(){
+function printData(data: any): string {
+  switch (typeof data) {
+    case "boolean" :
+      return t(data.toString());
+    default:
+      return data;
+  }
+}
+
+function getImageUrl() {
   return new URL(`../../assets/images/${props.buttonImgFileName}`, import.meta.url)
 }
 </script>

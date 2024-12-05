@@ -41,6 +41,13 @@ const i18n = createI18n({
           officeEmail: 'E-mail',
           officeTel: 'Telefonszám'
         },
+        orderTable:{
+          id: 'Azonosító',
+          startDateTime: 'Foglalás időpontja',
+          startAddress:'Indulási cím',
+          finishDateTime:'Lezárás időpontja',
+          destinationAddress:'Úticél'
+        },
       },
       toastMessages: {
         createSuccess: 'Sikeres létrehozás',
