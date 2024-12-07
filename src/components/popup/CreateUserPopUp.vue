@@ -101,13 +101,12 @@ const createInProgress = ref<boolean>(false)
 async function createUser() {
   createInProgress.value = true
   const newUser = await UserService.createUser(email.value,nameOfUser.value, userType.value);
-  console.log(newUser)
+  createInProgress.value = false
   if (newUser) {
     toast(t("toastMessages.createSuccess"), ToastConfigs.successToastConfig as ToastOptions)
     return
   }
   toast(t("toastMessages.createFail"), ToastConfigs.errorToastConfig as ToastOptions)
-  createInProgress.value = false
 }
 
 </script>

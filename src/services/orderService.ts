@@ -1,6 +1,6 @@
 import axios from "axios";
 import {useCookies} from "vue3-cookies";
-
+import * as Order from "@/types/Order";
 const API_URL = 'http://localhost:8085/order/';
 const axiosClient = axios.create({withCredentials: true})
 const {cookies} = useCookies();
@@ -31,7 +31,7 @@ class OrderService {
       }
     } catch (err) {
       return []
-      console.log(err);
+      (err);
     }
   }
 }

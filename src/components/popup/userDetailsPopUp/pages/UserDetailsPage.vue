@@ -21,14 +21,7 @@
                    @click="userDataStore.deleteStarted = true">
             </div>
           </div>
-          <div class="flex flex-col items-stretch mt-3 max-md:pl-5">
-            <label class="self-center text-center text-xl text-black  whitespace-nowrap">
-              ID
-            </label>
-            <label class="mt-3 text-center">
-              {{ userDataStore.selectedUser.id }}
-            </label>
-          </div>
+          <DataWithLabel label="ID" :data="userDataStore.selectedUser.id"/>
           <div class="flex flex-col items-stretch mt-3 max-md:pl-5">
             <InputField
               field-id="email"
@@ -110,6 +103,7 @@ import {useForm} from "vee-validate";
 import {object} from "yup";
 import InputField from "@/components/commons/inputs/InputField.vue"
 import Selector from "@/components/commons/inputs/ListSelector.vue"
+import DataWithLabel from "@/components/commons/DataWithLabel.vue";
 
 const {t} = useI18n()
 const userDataStore = useSelectedUserStore()
@@ -134,7 +128,6 @@ const selectorElements = [
 email.value = userDataStore.selectedUser.email
 nameOfUser.value = userDataStore.selectedUser.name
 userType.value = userDataStore.selectedUser.typeId
-console.log(userDataStore.selectedUser.typeId)
 
 async function saveUserChanges() {
   userDataStore.saveInProgress = true;

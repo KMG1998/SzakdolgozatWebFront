@@ -29,17 +29,17 @@
       </div>
       <div
         class="flex flex-col items-stretch max-md:w-full max-md:ml-0"
-        @click="selectedPage = modalPages.vehiclesPage"
+        @click="selectedPage = modalPages.vehiclePage"
       >
-          <img
-            loading="lazy"
-            src="@/assets/images/vehicle_button.png"
-            class="rounded-full border-2 border-black drop-shadow-md w-[70px] fill-white self-center cursor-pointer"
-          />
+        <img
+          loading="lazy"
+          src="@/assets/images/vehicle_button.png"
+          class="rounded-full border-2 border-black drop-shadow-md w-[70px] fill-white self-center cursor-pointer"
+        />
       </div>
     </div>
     <UserDetailsUserPage v-if="selectedPage === modalPages.userPage"/>
-    <UserDetailsVehiclePage v-if="selectedPage === modalPages.vehiclesPage"/>
+    <UserDetailsVehiclePage v-if="selectedPage === modalPages.vehiclePage"/>
     <UserDetailsCompanyPage v-if="selectedPage === modalPages.companyPage"/>
   </div>
   <div v-else class="fixed flex items-center bg-white rounded-full p-2 justify-center opacity-100 z-50">
@@ -52,17 +52,17 @@
 </template>
 <script setup lang="ts">
 import UserDetailsUserPage from "@/components/popup/userDetailsPopUp/pages/UserDetailsPage.vue";
-import UserDetailsVehiclePage from "@/components/popup/userDetailsPopUp/pages/VehicleDetailsPage.vue";
-import UserDetailsCompanyPage from "@/components/popup/userDetailsPopUp/pages/CompanyDetailsPage.vue";
+import UserDetailsVehiclePage from "@/components/popup/userDetailsPopUp/pages/UserDetailsVehiclePage.vue";
+import UserDetailsCompanyPage from "@/components/popup/userDetailsPopUp/pages/UserDetailsCompanyPage.vue";
 import {useSelectedUserStore} from "@/stores/selectedUser";
 import VehicleService from "@/services/vehicleService";
 import CompanyService from "@/services/companyService";
 import {onBeforeMount, ref} from "vue";
 import {SemipolarSpinner} from 'epic-spinners'
 
-enum modalPages{
+enum modalPages {
   userPage = 1,
-  vehiclesPage = 2,
+  vehiclePage = 2,
   companyPage = 3
 }
 
@@ -74,11 +74,8 @@ onBeforeMount(() => {
 })
 
 async function getAdditionalData() {
-  if (selectedUserStore.selectedUser.typeId === 3) {
-    selectedUserStore.userVehicle = await VehicleService.findVehicleByDriver(selectedUserStore.selectedUser.id)
-  }
+  selectedUserStore.userVehicle = await VehicleService.findVehicleByDriver(selectedUserStore.selectedUser.id)
   if (selectedUserStore.selectedUser.typeId === 4) {
-    selectedUserStore.userVehicle = await VehicleService.findVehicleByDriver(selectedUserStore.selectedUser.id)
     selectedUserStore.userCompany = await CompanyService.getCompanyByWorker(selectedUserStore.selectedUser.id)
   }
 }

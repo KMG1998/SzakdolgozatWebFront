@@ -77,7 +77,7 @@
 <script setup lang="ts">
 import {useSelectedUserStore} from "@/stores/selectedUser.ts";
 import {onBeforeMount, ref} from "vue";
-import * as Vehicle from "@/types/Vehicle";
+import {Vehicle} from "@/types/Vehicle";
 import DataTable from "@/components/commons/DataTable.vue";
 import VehicleService from "@/services/vehicleService";
 import {toast} from "vue3-toastify";

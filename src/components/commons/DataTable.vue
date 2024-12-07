@@ -65,3 +65,9 @@ function getImageUrl() {
   return new URL(`../../assets/images/${props.buttonImgFileName}`, import.meta.url)
 }
 </script>
+
+<script lang="ts">
+export default {
+  name:'DataTable'
+}
+</script>

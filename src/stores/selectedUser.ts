@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia'
 import * as User from "@/types/User";
 import * as Vehicle from "@/types/Vehicle";
-import * as Company from "@/types/Company";
+import * as Company  from "@/types/Company";
 import {ref} from "vue";
 
 export const useSelectedUserStore = defineStore('selectedUser', {

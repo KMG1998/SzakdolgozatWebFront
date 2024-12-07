@@ -17,7 +17,7 @@
     >
       <div class="max-md:max-w-full text-left">Foglalások</div>
       <div>
-        <DataTable :table-data="companyData" header-class="orderTable" :field-list="['id','startDateTime','startAddress','finishDateTime','destinationAddress']" :on-details-click="toggleDetailsPopUp"
+        <DataTable :table-data="orderData" header-class="orderTable" :field-list="['id','startDateTime','startAddress','finishDateTime','destinationAddress']" :on-details-click="toggleDetailsPopUp"
                    button-img-file-name="details_eye.png"/>
       </div>
     </div>
@@ -32,11 +32,11 @@ import {useSelectedOrderStore} from "@/stores/selectedOrder.ts";
 import PopUp from "@/components/popup/PopUp.vue";
 import OrderDetailsPopUp from "@/components/popup/orderDetailsPopUp/OrderDetailsPopUp.vue";
 
-const companyData = ref(undefined)
+const orderData = ref(undefined)
 const selectedOrderStore = useSelectedOrderStore()
 
 async function getVehicles() {
-  companyData.value = await OrderService.getAllOrders()
+  orderData.value = await OrderService.getAllOrders()
 }
 
 onBeforeMount(() => {

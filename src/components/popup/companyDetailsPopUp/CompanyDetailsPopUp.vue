@@ -51,8 +51,8 @@
 </template>
 <script setup lang="ts">
 import UserDetailsUserPage from "@/components/popup/userDetailsPopUp/pages/UserDetailsPage.vue";
-import UserDetailsVehiclePage from "@/components/popup/userDetailsPopUp/pages/VehicleDetailsPage.vue";
-import UserDetailsCompanyPage from "@/components/popup/userDetailsPopUp/pages/CompanyDetailsPage.vue";
+import UserDetailsVehiclePage from "@/components/popup/userDetailsPopUp/pages/UserDetailsVehiclePage.vue";
+import UserDetailsCompanyPage from "@/components/popup/userDetailsPopUp/pages/UserDetailsCompanyPage.vue";
 import {useSelectedUserStore} from "@/stores/selectedUser";
 import VehicleService from "@/services/vehicleService";
 import CompanyService from "@/services/companyService";

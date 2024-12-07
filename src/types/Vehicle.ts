@@ -3,9 +3,8 @@ type Vehicle = undefined | {
     seats: number,
     color: string,
     type: string,
-    available: boolean,
     plateNumber: string,
-    insuranceId?: string
+    insuranceId: string
 }
 
-export default Vehicle
+export {Vehicle}

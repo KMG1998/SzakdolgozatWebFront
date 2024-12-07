@@ -1,10 +1,12 @@
-import axios from "axios";
-import * as Company from "../types/Company";
+import axios, {AxiosError} from "axios";
 import {useCookies} from "vue3-cookies";
+import {toast} from "vue3-toastify";
+import ToastConfigs from "@/utils/toastConfigs";
+import * as Company from "@/types/Company";
 
 const API_URL = 'http://localhost:8085/company/';
 const axiosClient = axios.create({withCredentials: true})
-const { cookies } = useCookies();
+const {cookies} = useCookies();
 
 class CompanyService {
   constructor() {
@@ -14,6 +16,9 @@ class CompanyService {
       if (error.status === 401) {
         cookies.remove('authenticated')
         cookies.remove('token')
+      }
+      if (error.code === 'ERR_NETWORK' || error.code === 'ERR_CONNECTION_REFUSED') {
+        toast('Sikertelen csatlakozás', ToastConfigs.errorToastConfig);
       }
       return error;
     })
@@ -31,11 +36,8 @@ class CompanyService {
         officeEmail: officeEmail
       })
       .then(response => {
-        console.log(response);
-        if (response.data) {
-          return response.data as Company;
-        }
-      }).catch(err => console.log(err));
+        return response.status === 200
+      }).catch(err => (err));
   }
 
   async getAllCompany(): Promise<Array<Company> | void> {
@@ -50,18 +52,72 @@ class CompanyService {
           return companies
         }
       }).catch(err => {
-        console.log(err);
+        (err);
       });
   }
 
-  getCompanyById() {
-    return null
+  async getCompanyByWorker(workerId: string): Promise<Company | undefined> {
+    let company = undefined
+    await axiosClient
+      .post(API_URL + 'getByWorker', {
+        workerId: workerId,
+      })
+      .then(response => {
+        if (response.status === 200) {
+          (response.data)
+          company = response.data as Company
+        }
+      }).catch(err => {
+        if (err instanceof AxiosError && err.response) {
+          if (err.response.status === 400) {
+            toast(err.response.statusText, ToastConfigs.errorToastConfig);
+          }
+        }
+      })
+    return company
   }
 
-  async getCompanyByWorker(workerId: string): Promise<Company | undefined> {
-    return undefined
+  async connectCompanyToWorker(userId: string, companyId: string): Promise<boolean> {
+    let success = false
+    await axiosClient
+      .post(API_URL + 'connectToWorker', {
+        userId: userId,
+        companyId: companyId
+      })
+      .then(response => {
+        if (response.status === 200) {
+          success = true;
+        }
+      }).catch(err => {
+        if (err instanceof AxiosError && err.response) {
+          if (err.response.status === 400) {
+            toast(err.response.statusText, ToastConfigs.errorToastConfig);
+          }
+        }
+      })
+    return success
+  }
+
+  async unlinkCompanyFromUser(userId: string): Promise<boolean> {
+    let success = false
+    await axiosClient
+      .post(API_URL + 'unlinkFromWorker', {
+        userId: userId,
+      })
+      .then(response => {
+        if (response.status === 200) {
+          success = true;
+        }
+      }).catch(err => {
+        if (err instanceof AxiosError && err.response) {
+          if (err.response.status === 400) {
+            toast(err.response.statusText, ToastConfigs.errorToastConfig);
+          }
+        }
+      })
+    return success
   }
 
 }
 
-export default new CompanyService
+export default new CompanyService()
