@@ -50,7 +50,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import UserDetailsUserPage from "@/components/popup/userDetailsPopUp/pages/UserDetailsPage.vue";
+import UserDetailsUserPage from "@/components/popup/userDetailsPopUp/pages/UserDetailsUserPage.vue";
 import UserDetailsVehiclePage from "@/components/popup/userDetailsPopUp/pages/UserDetailsVehiclePage.vue";
 import UserDetailsCompanyPage from "@/components/popup/userDetailsPopUp/pages/UserDetailsCompanyPage.vue";
 import {useSelectedUserStore} from "@/stores/selectedUser";

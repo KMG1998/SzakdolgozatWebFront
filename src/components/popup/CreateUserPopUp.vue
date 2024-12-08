@@ -17,6 +17,7 @@
                   v-bind=emailProps
                   :meta="meta"
                   :error="errors.email"
+                  :readonly=false
                 />
                 <InputField
                   field-id="name"
@@ -26,6 +27,7 @@
                   v-bind=nameOfUserProps
                   :meta="meta"
                   :error="errors.nameOfUser"
+                  :readonly=false
                 />
                 <Selector
                   field-id="userType"
@@ -35,6 +37,7 @@
                   :meta="meta"
                   :error="errors.userType"
                   :elements=selectorElements
+                  :disabled=false
                 />
               </div>
             </div>
@@ -106,7 +109,7 @@ async function createUser() {
     toast(t("toastMessages.createSuccess"), ToastConfigs.successToastConfig as ToastOptions)
     return
   }
-  toast(t("toastMessages.createFail"), ToastConfigs.errorToastConfig as ToastOptions)
+  toast(t("toastMessages.createFail"), ToastConfigs.errorToastConfig)
 }
 
 </script>

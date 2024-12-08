@@ -10,18 +10,19 @@
             <p class="text-xl font-bold text-black w-full">felhasználó adatai</p>
             <div
               class="w-[40px] h-[40px] absolute right-4 z-10 bg-white border-solid rounded-full border-black border-2 p-[5px] cursor-pointer"
-              v-if="!userDataStore.editStarted && !userDataStore.deleteStarted">
+              v-if="!userDataStore.selectedUser.disabled && !userDataStore.editStarted && !userDataStore.deleteStarted">
               <img src="@/assets/images/edit_button.png"
                    @click="userDataStore.editStarted = true">
             </div>
             <div
               class="w-[40px] h-[40px] absolute left-4 z-10 bg-white border-solid rounded-full border-black border-2 p-[5px] cursor-pointer"
-              v-if="!userDataStore.editStarted && !userDataStore.deleteStarted">
+              v-if="!userDataStore.selectedUser.disabled && !userDataStore.editStarted && !userDataStore.deleteStarted">
               <img src="@/assets/images/delete_button.png"
                    @click="userDataStore.deleteStarted = true">
             </div>
           </div>
           <DataWithLabel label="ID" :data="userDataStore.selectedUser.id"/>
+          <DataWithLabel :data="$t(userDataStore.selectedUser.disabled.toString())" label="zárolt"/>
           <div class="flex flex-col items-stretch mt-3 max-md:pl-5">
             <InputField
               field-id="email"
@@ -145,7 +146,7 @@ async function saveUserChanges() {
     toast(t('toastMessages.saveSuccess'), ToastConfigs.successToastConfig as ToastOptions)
     return
   }
-  toast(t('toastMessages.saveFail'), ToastConfigs.errorToastConfig as ToastOptions)
+  toast(t('toastMessages.saveFail'), ToastConfigs.errorToastConfig)
 }
 
 async function deleteUser() {
@@ -159,7 +160,7 @@ async function deleteUser() {
     return
   }
   deleteStarted.value = false;
-  toast(t('toastMessages.deleteFail'), ToastConfigs.errorToastConfig as ToastOptions)
+  toast(t('toastMessages.deleteFail'), ToastConfigs.errorToastConfig)
 }
 
 function cancelEdit(){

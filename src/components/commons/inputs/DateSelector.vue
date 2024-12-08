@@ -10,6 +10,7 @@
       v-bind="$attrs"
       :value="props.modelValue"
       @input="$emit('update:modelValue',$event.target.value)"
+      :readonly="props.readonly"
     >
     <FieldError :error="error" v-if="error && meta.touched"/>
   </div>
@@ -29,6 +30,7 @@ const props = defineProps<{
   modelValue: string | number | undefined
   error: string | undefined
   meta: object
+  readonly: boolean
 }>()
 
 defineEmits(['update:modelValue']);

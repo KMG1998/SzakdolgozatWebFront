@@ -4,8 +4,6 @@ import i18n from "@/utils/lang";
 class Validators {
   private readonly phoneRegExp = '^\\+\\d{2,3}\\s\\(?\\d{2,3}\\)?\\s\\d{3}\\s\\d{4}$'
 
-
-
   public emailValidator = () => string().trim().required(i18n.global.t('inputValidation.requiredField'))
     .email(i18n.global.t('inputValidation.formatError'))
 
@@ -25,11 +23,16 @@ class Validators {
   public stringRequired = () => string().required(i18n.global.t('inputValidation.requiredField'))
 
   public numberRequired = () => number().required(i18n.global.t('inputValidation.requiredField'))
-  public dateRequired = () => date().required(i18n.global.t('inputValidation.requiredField')).min(new Date(),)
+
+  public dateRequired = () => date().transform((val) => isNaN(val.getTime()) ? null : val)
+    .required(i18n.global.t('inputValidation.requiredField'))
+    .min(new Date(), i18n.global.t('inputValidation.minDate'))
 
   public minLength = (minLength: number) => string().trim().required(i18n.global.t('inputValidation.requiredField'))
     .min(minLength, i18n.global.t('inputValidation.minLength', {length: minLength}))
 
+  public exactLength = (length: number) => string().trim().required(i18n.global.t('inputValidation.requiredField'))
+    .min(length, i18n.global.t('inputValidation.exactLength', {length: length})).max(length,i18n.global.t('inputValidation.exactLength', {length: length}))
 }
 
 

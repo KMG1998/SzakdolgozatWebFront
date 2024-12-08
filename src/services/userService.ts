@@ -3,6 +3,7 @@ import * as User from "../types/User";
 import {toast} from 'vue3-toastify';
 import ToastConfigs from "@/utils/toastConfigs";
 import {useCookies} from "vue3-cookies";
+import * as Vehicle from "@/types/Vehicle";
 
 const API_URL = 'http://localhost:8085/user/';
 const axiosClient = axios.create({withCredentials: true})
@@ -69,6 +70,22 @@ class UserService {
     try {
       const response = await axiosClient
         .get(API_URL + 'allUsers');
+      if (response.data) {
+        const users = Array<User>();
+        response.data.map(function (value: User) {
+          users.push(value as User)
+        });
+        return users;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async getAllDrivers() {
+    try {
+      const response = await axiosClient
+        .get(API_URL + 'allDrivers');
       if (response.data) {
         const users = Array<User>();
         response.data.map(function (value: User) {
@@ -150,6 +167,21 @@ class UserService {
       return false
     }
   }
+
+  async findByVehicle(vehicleId:string){
+    try {
+      const resp = await axiosClient.post(API_URL + 'findByVehicle',{vehicleId:vehicleId})
+      console.log(resp.data)
+      if(resp.status === 200 && resp.data){
+        console.log()
+        return resp.data as Vehicle;
+      }
+      return undefined
+    } catch (e) {
+      return undefined
+    }
+  }
+
 }
 
 export default new UserService()

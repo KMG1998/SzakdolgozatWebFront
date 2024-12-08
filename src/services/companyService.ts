@@ -28,16 +28,17 @@ class CompanyService {
                       officeAddress: string,
                       officeTel: string,
                       officeEmail: string) {
-    return axiosClient
-      .post(API_URL + 'create', {
+    try {
+      const resp = await axiosClient.post(API_URL + 'create', {
         name: name,
         officeAddress: officeAddress,
         officeTel: officeTel,
         officeEmail: officeEmail
       })
-      .then(response => {
-        return response.status === 200
-      }).catch(err => (err));
+      return resp.status === 200
+    } catch (e) {
+      return false
+    }
   }
 
   async getAllCompany(): Promise<Array<Company> | void> {
@@ -63,8 +64,7 @@ class CompanyService {
         workerId: workerId,
       })
       .then(response => {
-        if (response.status === 200) {
-          (response.data)
+        if (response.status === 200 && response.data) {
           company = response.data as Company
         }
       }).catch(err => {
@@ -75,6 +75,24 @@ class CompanyService {
         }
       })
     return company
+  }
+
+
+  async getCompanyForVehicle(vehicleId: string) {
+    let ret = undefined
+    await axiosClient.post(API_URL + 'getByVehicle', {vehicleId: vehicleId}).then(response => {
+        if (response.data) {
+          ret = response.data as Company
+        }
+      }
+    ).catch(err => {
+      if (err instanceof AxiosError && err.response) {
+        if (err.response.status === 400) {
+          toast(err.response.statusText, ToastConfigs.errorToastConfig);
+        }
+      }
+    })
+    return ret
   }
 
   async connectCompanyToWorker(userId: string, companyId: string): Promise<boolean> {
@@ -118,6 +136,46 @@ class CompanyService {
     return success
   }
 
+  async connectCompanyToVehicle(vehicleId: string, companyId: string): Promise<boolean> {
+    let success = false
+    await axiosClient
+      .post(API_URL + 'connectToVehicle', {
+        vehicleId: vehicleId,
+        companyId: companyId
+      })
+      .then(response => {
+        if (response.status === 200) {
+          success = true;
+        }
+      }).catch(err => {
+        if (err instanceof AxiosError && err.response) {
+          if (err.response.status === 400) {
+            toast(err.response.statusText, ToastConfigs.errorToastConfig);
+          }
+        }
+      })
+    return success
+  }
+
+  async unlinkCompanyFromVehicle(vehicleId: string): Promise<boolean> {
+    let success = false
+    await axiosClient
+      .post(API_URL + 'unlinkFromVehicle', {
+        vehicleId: vehicleId,
+      })
+      .then(response => {
+        if (response.status === 200) {
+          success = true;
+        }
+      }).catch(err => {
+        if (err instanceof AxiosError && err.response) {
+          if (err.response.status === 400) {
+            toast(err.response.statusText, ToastConfigs.errorToastConfig);
+          }
+        }
+      })
+    return success
+  }
 }
 
 export default new CompanyService()

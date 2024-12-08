@@ -14,6 +14,7 @@
                 v-bind=seatsProps
                 :meta="meta"
                 :error="errors.seats"
+                :readonly = false
               />
               <InputField
                 field-id="plateNum"
@@ -23,6 +24,7 @@
                 v-bind=plateNumProps
                 :meta="meta"
                 :error="errors.plateNum"
+                :readonly = false
               />
               <InputField
                 field-id="carType"
@@ -32,6 +34,7 @@
                 v-bind=carTypeProps
                 :meta="meta"
                 :error="errors.carType"
+                :readonly = false
               />
               <InputField
                 field-id="carColor"
@@ -41,6 +44,17 @@
                 v-bind=colorProps
                 :meta="meta"
                 :error="errors.color"
+                :readonly = false
+              />
+              <InputField
+                field-id="companyId"
+                label="Cég azonosító"
+                type="text"
+                v-model="companyId"
+                v-bind=companyIdProps
+                :meta="meta"
+                :error="errors.companyId"
+                :readonly = false
               />
             </div>
             <div class="flex grow flex-col items-stretch mt-9 max-md:pl-5">
@@ -51,6 +65,7 @@
                 v-bind=insuranceValidUntilProps
                 :meta="meta"
                 :error="errors.insuranceValidUntil"
+                :readonly = false
               />
               <InputField
                 field-id="insuranceIssuer"
@@ -60,6 +75,7 @@
                 v-bind=insuranceIssuerProps
                 :meta="meta"
                 :error="errors.insuranceIssuer"
+                :readonly = false
               />
               <InputField
                 field-id="insuranceNumber"
@@ -69,6 +85,7 @@
                 v-bind=insuranceNumberProps
                 :meta="meta"
                 :error="errors.insuranceNumber"
+                :readonly = false
               />
               <DateSelector
                 field-id="registrationValidUntil"
@@ -77,6 +94,7 @@
                 v-bind=registrationValidUntilProps
                 :meta="meta"
                 :error="errors.registrationValidUntil"
+                :readonly=false
               />
             </div>
           </div>
@@ -123,6 +141,7 @@ const schema = toTypedSchema(object({
   plateNum: Validators.minLength(6),
   carType: Validators.minLength(3),
   color: Validators.minLength(3),
+  companyId: Validators.exactLength(36),
   insuranceValidUntil: Validators.dateRequired(),
   insuranceIssuer: Validators.minLength(3),
   insuranceNumber: Validators.minLength(3),
@@ -134,6 +153,7 @@ const [seats, seatsProps] = defineField('seats')
 const [plateNum, plateNumProps] = defineField('plateNum')
 const [carType, carTypeProps] = defineField('carType')
 const [color, colorProps] = defineField('color')
+const [companyId, companyIdProps] = defineField('companyId')
 const [insuranceValidUntil, insuranceValidUntilProps] = defineField('insuranceValidUntil')
 const [insuranceIssuer, insuranceIssuerProps] = defineField('insuranceIssuer')
 const [insuranceNumber, insuranceNumberProps] = defineField('insuranceNumber')
@@ -143,7 +163,7 @@ const createInProgress = ref<boolean>(false)
 async function createVehicle() {
   if (meta.value.valid) {
     createInProgress.value = true
-    const newVehicle = await VehicleService.createVehicle(seats.value, plateNum.value, carType.value, color.value,
+    const newVehicle = await VehicleService.createVehicle(companyId.value,seats.value, plateNum.value, carType.value, color.value,
       insuranceValidUntil.value,insuranceIssuer.value,insuranceNumber.value,registrationValidUntil.value);
     createInProgress.value = false
     if (newVehicle !== undefined) {

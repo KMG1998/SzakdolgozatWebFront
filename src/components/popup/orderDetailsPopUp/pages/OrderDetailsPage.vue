@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import {useSelectedOrderStore} from "@/stores/selectedOrder";
 import DataWithLabel from "@/components/commons/DataWithLabel.vue";
-import convertClosure from "@/utils/closureConverter";
+import {convertClosure} from "@/utils/valueConverter";
 import formatDate from '@/utils/dateFormatter'
 
 const selectedOrderStore = useSelectedOrderStore()

@@ -3,7 +3,7 @@
        class="fixed flex flex-col items-center py-4 bg-white rounded-3xl opacity-100 z-50">
     <div
       class="gap-5 flex flex-row mb-2 max-md:items-stretch max-md:gap-0"
-      v-if="(selectedUserStore.selectedUser.typeId === 3 || selectedUserStore.selectedUser.typeId === 4) && !selectedUserStore.deleteStarted && !selectedUserStore.editStarted"
+      v-if="shouldShowMenu"
     >
       <div class="flex grow flex-col items-center" @click="selectedPage = modalPages.userPage">
         <img
@@ -15,7 +15,7 @@
       <div
         class="flex flex-col items-stretch"
         @click="selectedPage = modalPages.companyPage"
-        v-if="selectedUserStore.selectedUser.typeId === 4"
+        v-if="shouldShowMenu"
       >
         <div
           class="flex grow flex-col items-center"
@@ -30,6 +30,7 @@
       <div
         class="flex flex-col items-stretch max-md:w-full max-md:ml-0"
         @click="selectedPage = modalPages.vehiclePage"
+        v-if="[3,4].includes(selectedUserStore.selectedUser.typeId)"
       >
         <img
           loading="lazy"
@@ -51,7 +52,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import UserDetailsUserPage from "@/components/popup/userDetailsPopUp/pages/UserDetailsPage.vue";
+import UserDetailsUserPage from "@/components/popup/userDetailsPopUp/pages/UserDetailsUserPage.vue";
 import UserDetailsVehiclePage from "@/components/popup/userDetailsPopUp/pages/UserDetailsVehiclePage.vue";
 import UserDetailsCompanyPage from "@/components/popup/userDetailsPopUp/pages/UserDetailsCompanyPage.vue";
 import {useSelectedUserStore} from "@/stores/selectedUser";
@@ -66,16 +67,21 @@ enum modalPages {
   companyPage = 3
 }
 
+
 let selectedPage = ref(modalPages.userPage)
 const selectedUserStore = useSelectedUserStore()
+const shouldShowMenu = [1,2,3,4].includes(selectedUserStore.selectedUser.typeId)
+  &&!selectedUserStore.deleteStarted && !selectedUserStore.editStarted
 
 onBeforeMount(() => {
   getAdditionalData()
 })
 
 async function getAdditionalData() {
-  selectedUserStore.userVehicle = await VehicleService.findVehicleByDriver(selectedUserStore.selectedUser.id)
-  if (selectedUserStore.selectedUser.typeId === 4) {
+  if([3,4].includes(selectedUserStore.selectedUser.typeId)){
+    selectedUserStore.userVehicle = await VehicleService.findVehicleByDriver(selectedUserStore.selectedUser.id)
+  }
+  if (shouldShowMenu) {
     selectedUserStore.userCompany = await CompanyService.getCompanyByWorker(selectedUserStore.selectedUser.id)
   }
 }

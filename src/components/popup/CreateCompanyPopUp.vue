@@ -17,6 +17,7 @@
                   v-bind=companyEmailProps
                   :meta="meta"
                   :error="errors.companyEmail"
+                  :readonly="false"
                 />
                 <InputField
                   field-id="companyName"
@@ -26,6 +27,7 @@
                   v-bind=companyNameProps
                   :meta="meta"
                   :error="errors.companyName"
+                  :readonly="false"
                 />
                 <InputField
                   field-id="companyName"
@@ -35,6 +37,7 @@
                   v-bind=companyPhoneProps
                   :meta="meta"
                   :error="errors.companyPhone"
+                  :readonly="false"
                 />
                 <InputField
                   field-id="companyAddress"
@@ -44,6 +47,7 @@
                   v-bind=companyAddressProps
                   :meta="meta"
                   :error="errors.companyAddress"
+                  :readonly="false"
                 />
               </div>
             </div>
@@ -79,6 +83,8 @@ import {useForm} from "vee-validate";
 import {object} from "yup";
 import {ref} from "vue";
 import InputField from "@/components/commons/inputs/InputField.vue"
+import {toast, ToastOptions} from "vue3-toastify";
+import ToastConfigs from "@/utils/toastConfigs";
 
 const schema = toTypedSchema(object({
   companyEmail: Validators.emailValidator(),
@@ -97,8 +103,13 @@ const createInProgress = ref(false)
 
 async function createCompany() {
   createInProgress.value = true
-  const newCompany = await CompanyService.createCompany(companyName.value, companyAddress.value, companyPhone.value, companyEmail.value)
+  const success = await CompanyService.createCompany(companyName.value, companyAddress.value, companyPhone.value, companyEmail.value)
   createInProgress.value = false
+  if(success){
+    toast('Sikeres létrehozás',ToastConfigs.successToastConfig as ToastOptions)
+    return
+  }
+  toast('Sikertelen létrehozás',ToastConfigs.errorToastConfig)
 }
 
 

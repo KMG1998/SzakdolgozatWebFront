@@ -22,7 +22,8 @@ const i18n = createI18n({
           id: 'Azonosító',
           name: 'Név',
           typeId: 'Típus',
-          email: 'E-mail'
+          email: 'E-mail',
+          disabled:'Zárolt'
         },
         vehicleTable: {
           id: 'Azonosító',
@@ -67,7 +68,9 @@ const i18n = createI18n({
         formatError:'Hibás formátum',
         minLength:'Legalább {length} karakter hosszúnak kell lennie',
         minValue:'A minimum érték {minValue}',
-        phoneFormat:'A megfelelő formátum: +xx xx xxx xxxx'
+        exactLength:'Az értéknek pontosan {length} karakter hosszúnak kell lennie',
+        phoneFormat:'A megfelelő formátum: +xx xx xxx xxxx',
+        minDate:'A dátumnak a mai napon vagy később kell lennie'
       }
     },
   }

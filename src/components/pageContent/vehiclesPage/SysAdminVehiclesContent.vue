@@ -18,7 +18,7 @@
       <div class="max-md:max-w-full text-left">Járművek</div>
       <div>
         <DataTable :table-data="vehicleData" header-class="vehicleTable" button-img-file-name="details_eye.png"
-                   :on-details-click="toggleDetailsPopUp"/>
+                   :on-details-click="toggleDetailsPopUp" :field-list="tableFields"/>
       </div>
     </div>
   </div>
@@ -34,6 +34,7 @@ import PopUp from "@/components/popup/PopUp.vue";
 
 const vehicleData = ref(undefined)
 const selectedVehicleStore = useSelectedVehicleStore()
+const tableFields = ['id','seats','color','type','plateNumber']
 
 async function getVehicles() {
   vehicleData.value = await VehicleService.getAllVehicles();

@@ -6,7 +6,7 @@ import {useCookies} from "vue3-cookies";
 
 const API_URL = 'http://localhost:8085/vehicle/';
 const axiosClient = axios.create({withCredentials: true})
-const { cookies } = useCookies();
+const {cookies} = useCookies();
 
 class VehicleService {
   constructor() {
@@ -21,11 +21,12 @@ class VehicleService {
     })
   }
 
-  createVehicle(seats: number, plateNum: string, carType: string, color: string,
+  createVehicle(companyId:string,seats: number, plateNum: string, carType: string, color: string,
                 insuranceValidUntil: string, insuranceIssuer: string, insuranceNumber: string, registrationValidUntil: string
   ): Promise<Vehicle | void> {
     return axiosClient
       .post(API_URL + 'create', {
+        companyId:companyId,
         seats: seats,
         plateNumber: plateNum,
         type: carType,
@@ -129,6 +130,31 @@ class VehicleService {
       }
     }).catch((err) => console.log(err))
     return success
+  }
+
+  async updateVehicle(insuranceId: string, vehicleId: string, seats: number, plateNum: string, carType: string, color: string,
+                      insuranceValidUntil: string, insuranceIssuer: string, insuranceNumber: string, registrationValidUntil: string) {
+    let result = undefined
+    const resp = await axiosClient.post(API_URL + 'update', {
+      insuranceId: insuranceId, vehicleId: vehicleId, seats: seats, plateNumber: plateNum, type: carType,
+      color: color, insuranceValidUntil: insuranceValidUntil, insuranceIssuer: insuranceIssuer, insuranceNumber: insuranceNumber,
+      registrationValidUntil: registrationValidUntil
+    })
+    if (resp.data) {
+      result = resp.data as Vehicle;
+    }
+    return result;
+  }
+
+  async deleteVehicle(vehicleId){
+    try {
+      const resp = await axiosClient.post(API_URL + 'delete', {
+        vehicleId: vehicleId
+      });
+      return resp.status === 200
+    }catch (e){
+      return false
+    }
   }
 }
 
