@@ -41,19 +41,23 @@ class CompanyService {
     }
   }
 
-  async getAllCompany(): Promise<Array<Company> | void> {
+  async getAllCompany(companyNameSearch?: string | undefined): Promise<Array<Company> | void> {
     return axiosClient
-      .get(API_URL + 'allCompany')
+      .get(API_URL + 'allCompany', {
+        params: {
+          companyNameSearch: companyNameSearch
+        }
+      })
       .then(response => {
         if (response.data) {
           const companies = Array<Company>();
-          response.data.map(function (value: Company, key: number) {
+          response.data.map(function (value: Company) {
             companies.push(value as Company)
           });
           return companies
         }
       }).catch(err => {
-        (err);
+
       });
   }
 
@@ -175,6 +179,35 @@ class CompanyService {
         }
       })
     return success
+  }
+
+  async updateCompany(newData: Company):Promise<boolean>{
+    try {
+      const resp = await axiosClient
+        .post(API_URL + 'update', {
+          id: newData.id,
+          officeEmail: newData.officeEmail,
+          companyName: newData.companyName,
+          officeTel: newData.officeTel,
+          officeAddress: newData.officeAddress
+        })
+      return resp.status === 200
+    }catch (e){
+      return false
+    }
+  }
+
+
+  async deleteCompany(companyId:string) {
+    try {
+      const resp = await axiosClient
+        .post(API_URL + 'delete', {
+          companyId: companyId
+        })
+      return resp.status === 200
+    } catch (e){
+      return false
+    }
   }
 }
 

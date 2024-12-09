@@ -3,17 +3,16 @@
     <VehicleDetailsPopUp/>
   </PopUp>
   <div
-    class="flex flex-col grow shrink-0 mt-6 whitespace-nowrap basis-0 w-fit max-md:max-w-full"
+    class="flex flex-col grow shrink-0 mt-6 basis-0 w-fit max-md:max-w-full"
   >
-    <div class="flex flex-col ml-6 max-w-full w-[100px] max-md:ml-2.5">
-      <img
-        loading="lazy"
-        src="@/assets/images/search_button.png"
-        class="self-center w-full aspect-square fill-white"
-      />
-    </div>
+    <SearchInput
+      field-id="plateNum-search"
+      placeholder="Jármű rendszáma"
+      v-model="searchValue"
+      :search-function="searchVehicles"
+    />
     <div
-      class="flex flex-col px-6 pt-8 pb-20 mt-16 rounded-3xl bg-white bg-opacity-80 max-md:pl-5 max-md:mt-10 max-md:max-w-full"
+      class="flex flex-col px-6 pt-8 pb-20 mt-2 rounded-3xl bg-white bg-opacity-80 max-h-[730px] max-w-[1600px] h-max mb-10 overflow-x-auto"
     >
       <div class="max-md:max-w-full text-left">Járművek</div>
       <div>
@@ -30,26 +29,33 @@ import DataTable from "@/components/commons/DataTable.vue";
 import {onBeforeMount, ref} from "vue";
 import {useSelectedVehicleStore} from "@/stores/selectedVehicle.ts";
 import VehicleDetailsPopUp from "@/components/popup/vehicleDetailsPopUp/VehicleDetailsPopUp.vue"
+import SearchInput from "@/components/commons/inputs/SearchInput.vue";
 import PopUp from "@/components/popup/PopUp.vue";
 
+const searchValue = ref(undefined)
 const vehicleData = ref(undefined)
 const selectedVehicleStore = useSelectedVehicleStore()
 const tableFields = ['id','seats','color','type','plateNumber']
-
-async function getVehicles() {
-  vehicleData.value = await VehicleService.getAllVehicles();
-}
 
 onBeforeMount(() => {
   getVehicles()
   selectedVehicleStore.popUpToggleFunction = toggleDetailsPopUp
 })
 
+async function getVehicles() {
+  vehicleData.value = await VehicleService.getAllVehicles();
+}
+
+async function searchVehicles(){
+  vehicleData.value = undefined
+  vehicleData.value = await VehicleService.getAllVehicles(searchValue.value);
+}
 
 function toggleDetailsPopUp(selectedVehicle) {
   selectedVehicleStore.selectedVehicle = selectedVehicle
   selectedVehicleStore.popUpVisible = !selectedVehicleStore.popUpVisible
   if (!selectedVehicleStore.popUpVisible) {
+    searchValue.value = undefined
     getVehicles()
   }
 }

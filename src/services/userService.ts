@@ -7,7 +7,7 @@ import * as Vehicle from "@/types/Vehicle";
 
 const API_URL = 'http://localhost:8085/user/';
 const axiosClient = axios.create({withCredentials: true})
-const { cookies } = useCookies();
+const {cookies} = useCookies();
 
 class UserService {
   constructor() {
@@ -17,6 +17,9 @@ class UserService {
       if (error.status === 401) {
         cookies.remove('authenticated')
         cookies.remove('token')
+      }
+      if (error.code === 'ERR_NETWORK' || error.code === 'ERR_CONNECTION_REFUSED') {
+        toast('Sikertelen csatlakozás', ToastConfigs.errorToastConfig);
       }
       return error;
     })
@@ -66,10 +69,14 @@ class UserService {
     return newUserId
   }
 
-  async getAllUsers() {
+  async getAllUsers(userSearchEmail?: string | undefined) {
     try {
       const response = await axiosClient
-        .get(API_URL + 'allUsers');
+        .get(API_URL + 'allUsers', {
+          params: {
+            emailSearch: userSearchEmail
+          }
+        });
       if (response.data) {
         const users = Array<User>();
         response.data.map(function (value: User) {
@@ -151,15 +158,23 @@ class UserService {
     }
   }
 
-  async getOwnData():Promise<void>{
+  async getOwnData(): Promise<void> {
     const resp = await axiosClient.get(API_URL + 'getOwnData')
-    sessionStorage.setItem('userData', JSON.stringify(resp.data as User))
+    if (resp.data) {
+      const data = resp.data as User
+      if (data.typeId != 1) {
+        cookies.remove('authenticated')
+        cookies.remove('token')
+        return
+      }
+      sessionStorage.setItem('userData', JSON.stringify(resp.data as User))
+    }
   }
 
   async checkToken() {
     try {
       const resp = await axiosClient.post(API_URL + 'checkToken')
-      if(resp.status === 200 && sessionStorage.getItem('userData') == null){
+      if (resp.status === 200 && sessionStorage.getItem('userData') == null) {
         await this.getOwnData();
       }
       return resp.status === 200
@@ -168,17 +183,36 @@ class UserService {
     }
   }
 
-  async findByVehicle(vehicleId:string){
+  async findByVehicle(vehicleId: string) {
     try {
-      const resp = await axiosClient.post(API_URL + 'findByVehicle',{vehicleId:vehicleId})
+      const resp = await axiosClient.post(API_URL + 'findByVehicle', {vehicleId: vehicleId})
       console.log(resp.data)
-      if(resp.status === 200 && resp.data){
+      if (resp.status === 200 && resp.data) {
         console.log()
         return resp.data as Vehicle;
       }
       return undefined
     } catch (e) {
       return undefined
+    }
+  }
+
+
+  async changePass(currentPass: string, newPass: string) {
+    try {
+      const resp = await axiosClient.post(API_URL + 'changePassword', {currentPass: currentPass, newPass: newPass})
+      return resp.status === 200
+    } catch (e) {
+      return false
+    }
+  }
+
+  async resetPass(email) {
+    try {
+      const resp = await axiosClient.post(API_URL + 'resetPassword', {userEmail: email})
+      return resp.status === 200
+    } catch (e) {
+      return false
     }
   }
 

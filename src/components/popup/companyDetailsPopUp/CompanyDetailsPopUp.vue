@@ -1,45 +1,108 @@
 <template>
-  <div v-if="!selectedVehicleStore.saveInProgress"
+  <div v-if="!selectedCompanyStore.saveInProgress"
        class="fixed flex flex-col items-center py-4 bg-white rounded-3xl opacity-100 z-50">
-    <div
-      class="gap-5 flex flex-row mb-2 max-md:items-stretch max-md:gap-0"
-      v-if="!selectedVehicleStore.deleteStarted && !selectedVehicleStore.editStarted"
-    >
-      <div class="flex grow flex-col items-center" @click="selectedPage = modalPages.userPage">
-        <img
-          loading="lazy"
-          src="@/assets/images/user_button.png"
-          class="rounded-full border-2 border-black drop-shadow-md w-[70px] fill-white self-center cursor-pointer"
-        />
-      </div>
-      <div
-        class="flex flex-col items-stretch"
-        @click="selectedPage = modalPages.companyPage"
-      >
-        <div
-          class="flex grow flex-col items-center"
-        >
-          <img
-            loading="lazy"
-            src="@/assets/images/company_button.png"
-            class="rounded-full border-2 border-black drop-shadow-md w-[70px] fill-white self-center cursor-pointer"
-          />
+    <form @submit.prevent class="flex flex-col" v-if="!selectedCompanyStore.deleteStarted">
+      <div class="w-full min-w-[500px] max-w-[1100px] max-md:max-w-full px-[10px]">
+        <div class="flex gap-5 max-md:flex-col max-md:gap-0 max-md:items-stretch text-center">
+          <div
+            class="flex flex-col items-stretch w-[100%] min-w-[450px] max-md:ml-0 max-md:w-full"
+          >
+            <div class="flex flex-col grow items-stretch max-md:mt-10">
+              <p class="text-xl text-black">cég adatai</p>
+              <div
+                class="w-[40px] h-[40px] absolute right-4 z-10 bg-white border-solid rounded-full border-black border-2 p-[5px] cursor-pointer"
+                v-if="!selectedCompanyStore.editStarted && !selectedCompanyStore.deleteStarted">
+                <img src="@/assets/images/edit_button.png"
+                     @click="selectedCompanyStore.editStarted = true">
+              </div>
+              <div
+                class="w-[40px] h-[40px] absolute left-4 z-10 bg-white border-solid rounded-full border-black border-2 p-[5px] cursor-pointer"
+                v-if="!selectedCompanyStore.editStarted && !selectedCompanyStore.deleteStarted">
+                <img src="@/assets/images/delete_button.png"
+                     @click="selectedCompanyStore.deleteStarted = true">
+              </div>
+              <div class="flex flex-col items-stretch mt-9 max-md:pl-5">
+                <DataWithLabel
+                label="cég azonosító"
+                :data="selectedCompanyStore.selectedCompany.id"
+                />
+                <InputField
+                  field-id="companyEmail"
+                  label="céges e-mail"
+                  type="email"
+                  v-model=officeEmail
+                  v-bind=officeEmailProps
+                  :meta="meta"
+                  :error="errors.companyEmail"
+                  :readonly="!selectedCompanyStore.editStarted"
+                />
+                <InputField
+                  field-id="companyName"
+                  label="cég neve"
+                  type="text"
+                  v-model=companyName
+                  v-bind=companyNameProps
+                  :meta="meta"
+                  :error="errors.companyName"
+                  :readonly="!selectedCompanyStore.editStarted"
+                />
+                <InputField
+                  field-id="companyName"
+                  label="cég telefonszáma"
+                  type="tel"
+                  v-model=officeTel
+                  v-bind=officeTelProps
+                  :meta="meta"
+                  :error="errors.companyPhone"
+                  :readonly="!selectedCompanyStore.editStarted"
+                />
+                <InputField
+                  field-id="companyAddress"
+                  label="cég telephelye"
+                  type="text"
+                  v-model=officeAddress
+                  v-bind=officeAddressProps
+                  :meta="meta"
+                  :error="errors.companyAddress"
+                  :readonly="!selectedCompanyStore.editStarted"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div
-        class="flex flex-col items-stretch max-md:w-full max-md:ml-0"
-        @click="selectedPage = modalPages.vehiclesPage"
-      >
-          <img
-            loading="lazy"
-            src="@/assets/images/vehicle_button.png"
-            class="rounded-full border-2 border-black drop-shadow-md w-[70px] fill-white self-center cursor-pointer"
-          />
+        class="self-stretch mt-9 w-full bg-black min-h-[2px] max-md:max-w-full"
+        v-if="selectedCompanyStore.editStarted"
+      ></div>
+      <div class="flex flex-row justify-around items-center" v-if="selectedCompanyStore.editStarted">
+        <button type="button"
+                @click="updateCompany"
+                class="justify-center items-center px-16 py-2 mt-3 max-w-full text-xl text-black bg-white rounded-3xl border-2 border-green-400 border-solid w-[200px] max-md:px-5"
+        >Mentés
+        </button>
+        <button type="button"
+                @click="cancelEdit"
+                class="justify-center items-center px-16 py-2 mt-3 max-w-full text-xl text-black bg-white rounded-3xl border-2 border-red-600 border-solid w-[200px] max-md:px-5"
+        >Mégse
+        </button>
+      </div>
+    </form>
+    <div v-else class="flex flex-col justify-around items-center px-2">
+      <p class="text-xl font-bold text-black w-full">Biztos törli a céget?</p>
+      <div class="flex flex-row w-full justify-around gap-2">
+        <button type="button"
+                @click="deleteCompany"
+                class="justify-center items-center px-16 py-2 mt-3 max-w-full text-xl text-black bg-warning-red rounded-3xl border-2 border-black border-solid"
+        >Törlés
+        </button>
+        <button type="button"
+                @click="selectedCompanyStore.deleteStarted = false"
+                class="justify-center items-center px-16 py-2 mt-3 max-w-full text-xl text-black bg-white rounded-3xl border-2 border-black border-solid"
+        >Mégse
+        </button>
       </div>
     </div>
-    <!-- <UserDetailsUserPage v-if="selectedPage === modalPages.userPage"/>
-    <UserDetailsVehiclePage v-if="selectedPage === modalPages.vehiclesPage"/>
-    <UserDetailsCompanyPage v-if="selectedPage === modalPages.companyPage"/> -->
   </div>
   <div v-else class="fixed flex items-center bg-white rounded-full p-2 justify-center opacity-100 z-50">
     <semipolar-spinner
@@ -50,36 +113,80 @@
   </div>
 </template>
 <script setup lang="ts">
-import UserDetailsUserPage from "@/components/popup/userDetailsPopUp/pages/UserDetailsUserPage.vue";
-import UserDetailsVehiclePage from "@/components/popup/userDetailsPopUp/pages/UserDetailsVehiclePage.vue";
-import UserDetailsCompanyPage from "@/components/popup/userDetailsPopUp/pages/UserDetailsCompanyPage.vue";
-import {useSelectedUserStore} from "@/stores/selectedUser";
-import VehicleService from "@/services/vehicleService";
-import CompanyService from "@/services/companyService";
-import {onBeforeMount, ref} from "vue";
 import {SemipolarSpinner} from 'epic-spinners'
-import {useSelectedVehicleStore} from "@/stores/selectedVehicle";
+import {useSelectedCompanyStore} from "@/stores/selectedCompany";
+import {useI18n} from "vue-i18n";
+import {toTypedSchema} from "@vee-validate/yup";
+import Validators from "@/utils/valdiators";
+import {useForm} from "vee-validate";
+import {object} from "yup";
+import InputField from "@/components/commons/inputs/InputField.vue";
+import {toast, ToastOptions} from "vue3-toastify";
+import ToastConfigs from "@/utils/toastConfigs";
+import CompanyService from "@/services/companyService";
+import * as Company from "@/types/Company";
+import DataWithLabel from "@/components/commons/DataWithLabel.vue";
 
-enum modalPages{
-  userPage = 1,
-  vehiclesPage = 2,
-  companyPage = 3
-}
+const {t} = useI18n()
+const selectedCompanyStore = useSelectedCompanyStore()
+const schema = toTypedSchema(object({
+  officeEmail: Validators.emailValidator(),
+  companyName: Validators.minLength(3),
+  officeTel: Validators.phoneValidator(),
+  officeAddress: Validators.minLength(6)
+}));
 
-let selectedPage = ref(modalPages.userPage)
-const selectedVehicleStore = useSelectedVehicleStore()
+const {errors, meta, defineField} = useForm({validationSchema: schema})
+const [officeEmail, officeEmailProps] = defineField('officeEmail')
+const [companyName, companyNameProps] = defineField('companyName')
+const [officeTel, officeTelProps] = defineField('officeTel')
+const [officeAddress, officeAddressProps] = defineField('officeAddress')
 
-onBeforeMount(() => {
-  getAdditionalData()
-})
+officeEmail.value = selectedCompanyStore.selectedCompany.officeEmail
+companyName.value = selectedCompanyStore.selectedCompany.companyName
+officeTel.value = selectedCompanyStore.selectedCompany.officeTel
+officeAddress.value = selectedCompanyStore.selectedCompany.officeAddress
 
-async function getAdditionalData() {
-  /*if (selectedVehicleStore.selectedUser.typeId === 3) {
-    selectedVehicleStore.userVehicle = await VehicleService.findVehicleByDriver(selectedVehicleStore.selectedUser.id)
+async function updateCompany() {
+  selectedCompanyStore.saveInProgress = true;
+  const newData = {
+    id: selectedCompanyStore.selectedCompany.id,
+    companyEmail: officeEmail.value,
+    companyName: companyName.value,
+    officeTel: officeTel.value,
+    officeAddress: officeAddress.value
+  } as Company
+  const updatedUser = await CompanyService.updateCompany(newData)
+  selectedCompanyStore.saveInProgress = false;
+  if (updatedUser) {
+    selectedCompanyStore.selectedUser = updatedUser
+    selectedCompanyStore.editStarted = false
+    toast(t('toastMessages.saveSuccess'), ToastConfigs.successToastConfig as ToastOptions)
+    return
   }
-  if (selectedVehicleStore.selectedUser.typeId === 4) {
-    selectedVehicleStore.userVehicle = await VehicleService.findVehicleByDriver(selectedVehicleStore.selectedUser.id)
-    selectedVehicleStore.userCompany = await CompanyService.getCompanyByWorker(selectedVehicleStore.selectedUser.id)
-  }*/
+  toast(t('toastMessages.saveFail'), ToastConfigs.errorToastConfig)
 }
+
+async function deleteCompany() {
+  selectedCompanyStore.saveInProgress = true;
+  const deleteSuccess = await CompanyService.deleteCompany(selectedCompanyStore.selectedCompany.id)
+  selectedCompanyStore.saveInProgress = false
+  if (deleteSuccess) {
+    selectedCompanyStore.popUpToggleFunction()
+    toast(t('toastMessages.deleteSuccess'), ToastConfigs.successToastConfig as ToastOptions)
+    selectedCompanyStore.$reset()
+    return
+  }
+  selectedCompanyStore.deleteStarted.value = false;
+  toast(t('toastMessages.deleteFail'), ToastConfigs.errorToastConfig)
+}
+
+function cancelEdit() {
+  selectedCompanyStore.editStarted = false
+  officeEmail.value = selectedCompanyStore.selectedCompany.officeEmail
+  companyName.value = selectedCompanyStore.selectedCompany.companyName
+  officeTel.value = selectedCompanyStore.selectedCompany.officeTel
+  officeAddress.value = selectedCompanyStore.selectedCompany.officeAddress
+}
+
 </script>

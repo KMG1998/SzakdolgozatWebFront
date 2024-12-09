@@ -37,3 +37,9 @@ const props = defineProps<{
 
 defineEmits(['update:modelValue']);
 </script>
+
+<script lang="ts">
+export default {
+  name: 'InputField'
+}
+</script>

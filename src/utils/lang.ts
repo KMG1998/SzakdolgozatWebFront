@@ -9,7 +9,8 @@ const i18n = createI18n({
       true:'Igen',
       false:'Nem',
       mainPage: {
-        quickActions: 'gyorsműveletek'
+        createActions: 'Létrehozás',
+        ownData:'Személyes adatok'
       },
       sideMenu: {
         usersPage: 'Felhasználók',
