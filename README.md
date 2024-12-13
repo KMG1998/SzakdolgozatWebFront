@@ -1,19 +1,15 @@
-# test-vite
+# Szakdolgozat RendszerAdmin
 
-## Project Setup
+## Előkövetelmények:
+- működő és futó company back-end: https://github.com/KMG1998/SzakdolgozatWebBack
+- létező rendszer admin felhasználó, amit a back-end beállítás folyamán látrejön
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Futtatás
 
 ```sh
 npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
 ```
