@@ -139,13 +139,15 @@ async function saveUserChanges() {
     typeId: userType.value
   } as User
   const updatedUser = await UserService.updateUser(newData)
-  userDataStore.saveInProgress = false;
+  console.log(updatedUser)
   if (updatedUser) {
     userDataStore.selectedUser = updatedUser
     userDataStore.editStarted = false
+    userDataStore.saveInProgress = false;
     toast(t('toastMessages.saveSuccess'), ToastConfigs.successToastConfig as ToastOptions)
     return
   }
+  userDataStore.saveInProgress = false;
   toast(t('toastMessages.saveFail'), ToastConfigs.errorToastConfig)
 }
 
@@ -159,7 +161,7 @@ async function deleteUser() {
     userDataStore.$reset()
     return
   }
-  deleteStarted.value = false;
+  userDataStore.deleteStarted.value = false;
   toast(t('toastMessages.deleteFail'), ToastConfigs.errorToastConfig)
 }
 

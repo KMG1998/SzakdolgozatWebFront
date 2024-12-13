@@ -62,7 +62,8 @@ const i18n = createI18n({
         linkFail:'Sikertelen összekötés',
         unlinkSuccess:'Sikeres leválasztás',
         unlinkFail:'Sikertelen leválasztás',
-        pleaseLogIn:'Kérjük,jelentkezzen be'
+        pleaseLogIn:'Kérjük,jelentkezzen be',
+        passwordMismatch:'Nem egyezik az új jelszó az ismétléssel'
       },
       inputValidation:{
         requiredField:'Kötelező mező',
