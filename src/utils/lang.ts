@@ -50,6 +50,13 @@ const i18n = createI18n({
           finishDateTime:'Lezárás időpontja',
           destinationAddress:'Úticél'
         },
+        reviewTable:{
+          id: 'Azonosító',
+          reviewer: 'Értékelő ID',
+          score:'Pontszám',
+          reviewText:'Szöveg',
+          createdAt:'Létrehozás időpontja'
+        },
       },
       toastMessages: {
         createSuccess: 'Sikeres létrehozás',

@@ -41,7 +41,7 @@
       <div
         class="flex flex-col items-stretch max-md:w-full max-md:ml-0"
         @click="selectedPage = modalPages.reviewsPage"
-        v-if="[3,4].includes(selectedUserStore.selectedUser.typeId)"
+        v-if="[3,4,5].includes(selectedUserStore.selectedUser.typeId)"
       >
         <img
           loading="lazy"
@@ -85,8 +85,7 @@ enum modalPages {
 
 let selectedPage = ref(modalPages.userPage)
 const selectedUserStore = useSelectedUserStore()
-const shouldShowMenu = [1,2,3,4].includes(selectedUserStore.selectedUser.typeId)
-  &&!selectedUserStore.deleteStarted && !selectedUserStore.editStarted
+const shouldShowMenu = !selectedUserStore.deleteStarted && !selectedUserStore.editStarted
 
 onBeforeMount(() => {
   getAdditionalData()
@@ -95,6 +94,8 @@ onBeforeMount(() => {
 async function getAdditionalData() {
   if([3,4].includes(selectedUserStore.selectedUser.typeId)){
     selectedUserStore.userVehicle = await VehicleService.findVehicleByDriver(selectedUserStore.selectedUser.id)
+  }
+  if([3,4,5].includes(selectedUserStore.selectedUser.typeId)){
     selectedUserStore.userReviews = await ReviewService.getReviewsForDriver(selectedUserStore.selectedUser.id)
   }
   if (shouldShowMenu) {
